@@ -1,12 +1,6 @@
 using CXMDIRECT.AbstractClasses;
-using CXMDIRECT.Data;
 using CXMDIRECT.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Primitives;
-using System;
-using System.Xml.Linq;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace CXMDIRECT.Controllers
 {
@@ -31,9 +25,11 @@ namespace CXMDIRECT.Controllers
         [HttpDelete("{id}")]
         public Response<dynamic> DeleteNode(int id)
         {
-            List<(string name, string value)> parameters = new();
+            List<(string name, string value)> parameters = new()
+            {
+                new("id", id.ToString())
+            };
 
-            parameters.Add(new("id", id.ToString()));
             try
             {
                 nodeController.Delete(id);
@@ -58,11 +54,12 @@ namespace CXMDIRECT.Controllers
         [HttpPost()]
         public Response<dynamic> AddNode(int parrentId, string name, string description = "")
         {
-            List<(string name, string value)> parameters = new();
-
-            parameters.Add(new("parrentId", parrentId.ToString()));
-            parameters.Add(new("name", name));
-            parameters.Add(new("description", description));
+            List<(string name, string value)> parameters = new()
+            {
+                new("parrentId", parrentId.ToString()),
+                new("name", name),
+                new("description", description)
+            };
 
             try
             {
@@ -97,23 +94,29 @@ namespace CXMDIRECT.Controllers
         [HttpPost()]
         public Response<dynamic> EditNode(int id, int parrentId, string name, string description = "")
         {
-            List<(string name, string value)> parameters = new();
-
-            parameters.Add(new("id", id.ToString()));
-            parameters.Add(new("parrentId", parrentId.ToString()));
-            parameters.Add(new("name", name));
-            parameters.Add(new("description", description));
+            List<(string name, string value)> parameters = new()
+            {
+                new("id", id.ToString()),
+                new("parrentId", parrentId.ToString()),
+                new("name", name),
+                new("description", description)
+            };
 
             try
             {
                 if (parrentId < 0)
                 {
-                    throw new SecureException("The parent id must be greater or equal then 0");
+                    throw new SecureException("The parent id must be greater or equal 0");
                 }
 
                 Node node = nodeController.Edit(id, parrentId, name, description);
 
-                throw new NotImplementedException();
+                return new Response<dynamic>()
+                {
+                    Type = "EditNode",
+                    Id = 1,
+                    Data = node
+                };
 
             }
             catch (SecureException s)

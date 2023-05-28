@@ -12,7 +12,7 @@ namespace CXMDIRECT.Controllers
             {
                 if (parentId < 0)
                 {
-                    throw new SecureException("The parent id must be greater or equal then 0");
+                    throw new SecureException("The parent id must be greater or equal 0");
                 }
 
                 NodesDbController nodesDbController = new();
@@ -30,14 +30,39 @@ namespace CXMDIRECT.Controllers
                 throw new Exception(ex.Message, ex);
             }
         }
-        internal override Node Edit(int id, int parentId, string name, string description) => throw new NotImplementedException();
+        internal override Node Edit(int id, int parentId, string name, string description)
+        {
+            try
+            {
+                if (id <= 0)
+                {
+                    throw new SecureException("The node id must be greater 0");
+                }
+                if (parentId < 0)
+                {
+                    throw new SecureException("The paren id must be greater or equal 0");
+                }
+
+                NodesDbController nodesDbController = new();
+
+                return ConvertToNode(nodesDbController.Edit(id, parentId, name, description));
+            }
+            catch (SecureException s)
+            {
+                throw new SecureException(s.Message);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex);
+            }
+        }
         internal override void Delete(int id)
         {
             try
             {
-                if (id == 0)
+                if (id < 0)
                 {
-                    throw new SecureException("The node id must be greater or equal then 0");
+                    throw new SecureException("The node id must be greater 0");
                 }
 
                 NodesDbController nodeDbController = new();
