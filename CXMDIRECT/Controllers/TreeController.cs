@@ -4,6 +4,7 @@ using CXMDIRECT.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Primitives;
+using System;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace CXMDIRECT.Controllers
@@ -59,17 +60,15 @@ namespace CXMDIRECT.Controllers
 
             try
             {
+                Task<Node> task = Task.Run<Node>(async () => await nodeController.Add(parrentId, name, description));
+                Node node = task.Result;
 
-                if (parrentId < 0)
+                return new Response<dynamic>()
                 {
-                    throw new SecureException("The parent id must be greater or equal then 0");
-                }
-
-                Node node = nodeController.Add(parrentId, name, description);
-
-
-                throw new NotImplementedException();
-
+                    Type = "AddNode",
+                    Id = 1,
+                    Data = node
+                };
             }
             catch (SecureException s)
             {
