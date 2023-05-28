@@ -29,12 +29,10 @@ namespace CXMDIRECT.Controllers
             {
                 if (id == 0)
                 {
-                    throw new SecureException("The node id must be greater then 0");
+                    throw new SecureException("The node id must be greater or equal then 0");
                 }
 
-
                 throw new NotImplementedException();
-               
             }
             catch(SecureException s)
             {
@@ -45,6 +43,59 @@ namespace CXMDIRECT.Controllers
                return AddToLogs(e);
             }
         }
+
+        [HttpPost()]
+        public Response<dynamic> AddNode(int parrentId, string name, string description = "")
+        {
+            try
+            {
+                if (parrentId < 0)
+                {
+                    throw new SecureException("The parent id must be greater or equal then 0");
+                }
+
+                Node node = nodeController.Add(parrentId, name, description);
+
+
+                throw new NotImplementedException();
+
+            }
+            catch (SecureException s)
+            {
+                return AddToLogs(s);
+            }
+            catch (System.Exception e)
+            {
+                return AddToLogs(e);
+            }
+        }
+
+        [HttpPost()]
+        public Response<dynamic> EditNode(int id, int parrentId, string name, string description = "")
+        {
+            try
+            {
+                if (parrentId < 0)
+                {
+                    throw new SecureException("The parent id must be greater or equal then 0");
+                }
+
+                Node node = nodeController.Edit(id, parrentId, name, description);
+
+
+                throw new NotImplementedException();
+
+            }
+            catch (SecureException s)
+            {
+                return AddToLogs(s);
+            }
+            catch (System.Exception e)
+            {
+                return AddToLogs(e);
+            }
+        }
+
 
         private Response<dynamic> AddToLogs(System.Exception e)
         {
