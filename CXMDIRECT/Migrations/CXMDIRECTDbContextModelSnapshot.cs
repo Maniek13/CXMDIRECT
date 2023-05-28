@@ -33,7 +33,7 @@ namespace CXMDIRECT.Migrations
                     b.Property<string>("ExtensionType")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("InstanceData")
+                    b.Property<DateTime>("InstanceDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Message")

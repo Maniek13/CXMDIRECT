@@ -16,7 +16,12 @@ namespace CXMDIRECT.Data
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer(@"Data Source=RAKIETA\SQLEXPRESS; Database=CXMDIRECT;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False");
+                var builder = new ConfigurationBuilder()
+                       .SetBasePath(Directory.GetCurrentDirectory())
+                       .AddJsonFile("appSettings.json", optional: true, reloadOnChange: true);
+                IConfiguration configuration = builder.Build();
+
+                optionsBuilder.UseSqlServer(configuration.GetConnectionString("CXMDIRECTConnection"));
             }
         }
     }
