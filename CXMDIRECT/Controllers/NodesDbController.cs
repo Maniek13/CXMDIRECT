@@ -26,12 +26,40 @@ namespace CXMDIRECT.Controllers
                 await db.SaveChangesAsync();
                 return node;
             }
+            catch(SecureException s)
+            {
+                throw new SecureException(s.Message);
+            }
             catch(Exception ex)
             {
                 throw new Exception(ex.Message, ex);
             }
         }
-        internal override NodeDbModel Edit(int id, int parentId, string name, string description) => throw new NotImplementedException();
-        internal override int Delete(int id) => throw new NotImplementedException();
+        internal override async Task<NodeDbModel> Edit(int id, int parentId, string name, string description) => throw new NotImplementedException();
+        internal override bool Delete(int id)
+        {
+            try
+            {
+                using var db = new CXMDIRECTDbContext();
+                if (db.Nodes.Where(el => el.ParentId == id).FirstOrDefault() != null)
+                    throw new SecureException("Object have a children, plese delete or edit it first");
+
+                db.Nodes.Remove(new NodeDbModel()
+                {
+                    Id = id,
+                });
+
+                db.SaveChanges();
+                return true;
+            }
+            catch (SecureException s)
+            {
+                throw new SecureException(s.Message);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex);
+            }
+        }
     }
 }

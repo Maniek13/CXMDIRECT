@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Primitives;
 using System;
+using System.Xml.Linq;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace CXMDIRECT.Controllers
@@ -32,23 +33,24 @@ namespace CXMDIRECT.Controllers
         {
             List<(string name, string value)> parameters = new();
 
+            parameters.Add(new("id", id.ToString()));
             try
             {
-                if (id == 0)
-                {
-                    throw new SecureException("The node id must be greater or equal then 0");
-                }
+                nodeController.Delete(id);
 
-                throw new NotImplementedException();
+                return new Response<dynamic>()
+                {
+                    Type = "DeleteNode",
+                    Id = 1,
+                    Data = true
+                };
             }
             catch(SecureException s)
             {
-                parameters.Add(new("id", id.ToString()));
                 return AddToLogs(s, parameters);
             }
             catch(Exception e)
             {
-                parameters.Add(new("id", id.ToString()));
                 return AddToLogs(e, parameters);
             }
         }
@@ -58,9 +60,14 @@ namespace CXMDIRECT.Controllers
         {
             List<(string name, string value)> parameters = new();
 
+            parameters.Add(new("parrentId", parrentId.ToString()));
+            parameters.Add(new("name", name));
+            parameters.Add(new("description", description));
+
             try
             {
                 Task<Node> task = Task.Run<Node>(async () => await nodeController.Add(parrentId, name, description));
+                
                 Node node = task.Result;
 
                 return new Response<dynamic>()
@@ -70,20 +77,19 @@ namespace CXMDIRECT.Controllers
                     Data = node
                 };
             }
+            catch (AggregateException ae)
+            {
+                if(ae.InnerException != null)
+                    return AddToLogs(ae.InnerException, parameters);
+                else
+                    return AddToLogs(ae, parameters);
+            }
             catch (SecureException s)
             {
-                parameters.Add(new("parrentId", parrentId.ToString()));
-                parameters.Add(new("name", name));
-                parameters.Add(new("description", description));
-
                 return AddToLogs(s, parameters);
             }
             catch (Exception e)
             {
-                parameters.Add(new("parrentId", parrentId.ToString()));
-                parameters.Add(new("name", name));
-                parameters.Add(new("description", description));
-
                 return AddToLogs(e, parameters);
             }
         }
@@ -92,6 +98,11 @@ namespace CXMDIRECT.Controllers
         public Response<dynamic> EditNode(int id, int parrentId, string name, string description = "")
         {
             List<(string name, string value)> parameters = new();
+
+            parameters.Add(new("id", id.ToString()));
+            parameters.Add(new("parrentId", parrentId.ToString()));
+            parameters.Add(new("name", name));
+            parameters.Add(new("description", description));
 
             try
             {
@@ -107,19 +118,10 @@ namespace CXMDIRECT.Controllers
             }
             catch (SecureException s)
             {
-                parameters.Add(new("id", id.ToString()));
-                parameters.Add(new("parrentId", parrentId.ToString()));
-                parameters.Add(new("name", name));
-                parameters.Add(new("description", description));
-
                 return AddToLogs(s, parameters);
             }
             catch (Exception e)
             {
-                parameters.Add(new("id", id.ToString()));
-                parameters.Add(new("parrentId", parrentId.ToString()));
-                parameters.Add(new("name", name));
-                parameters.Add(new("description", description));
 
                 return AddToLogs(e, parameters);
             }

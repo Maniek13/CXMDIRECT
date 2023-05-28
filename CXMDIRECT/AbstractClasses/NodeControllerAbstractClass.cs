@@ -6,6 +6,6 @@ namespace CXMDIRECT.AbstractClasses
     {
         internal virtual async Task<Node> Add(int parentId, string name, string description) => throw new NotImplementedException();
         internal abstract Node Edit(int id, int parentId, string name, string description);
-        internal abstract int Delete(int id);
+        internal abstract void Delete(int id);
     }
 }

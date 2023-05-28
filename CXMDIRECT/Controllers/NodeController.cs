@@ -21,13 +21,40 @@ namespace CXMDIRECT.Controllers
                 return ConvertToNode(node);
 
             }
-            catch(Exception ex)
+            catch (SecureException s)
+            {
+                throw new SecureException(s.Message);
+            }
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message, ex);
             }
         }
         internal override Node Edit(int id, int parentId, string name, string description) => throw new NotImplementedException();
-        internal override int Delete(int id) => throw new NotImplementedException();
+        internal override void Delete(int id)
+        {
+            try
+            {
+                if (id == 0)
+                {
+                    throw new SecureException("The node id must be greater or equal then 0");
+                }
+
+                NodesDbController nodeDbController = new();
+
+                if (nodeDbController.Delete(id) == false)
+                    throw new SecureException("Problem with delete, check is object exist in database");
+
+            }
+            catch (SecureException s)
+            {
+                throw new SecureException(s.Message);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex);
+            }
+        }
 
         private Node ConvertToNode(NodeDbModel node)
         {
