@@ -1,6 +1,12 @@
 using CXMDIRECT.AbstractClasses;
+using CXMDIRECT.Data;
 using CXMDIRECT.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Primitives;
+using System;
+using System.Xml.Linq;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace CXMDIRECT.Controllers
 {
@@ -54,12 +60,11 @@ namespace CXMDIRECT.Controllers
         [HttpPost()]
         public Response<dynamic> AddNode(int parrentId, string name, string description = "")
         {
-            List<(string name, string value)> parameters = new()
-            {
-                new("parrentId", parrentId.ToString()),
-                new("name", name),
-                new("description", description)
-            };
+            List<(string name, string value)> parameters = new();
+
+            parameters.Add(new("parrentId", parrentId.ToString()));
+            parameters.Add(new("name", name));
+            parameters.Add(new("description", description));
 
             try
             {

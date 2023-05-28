@@ -1,6 +1,7 @@
 ﻿using CXMDIRECT.AbstractClasses;
 using CXMDIRECT.Data;
 using CXMDIRECT.Models;
+using Microsoft.EntityFrameworkCore.Infrastructure.Internal;
 
 namespace CXMDIRECT.Controllers
 {
