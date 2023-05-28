@@ -37,8 +37,6 @@ GO
 
 CREATE PROCEDURE AddNode(@parentId INT, @name NVARCHAR(MAX), @description NVARCHAR(MAX) = '', @error NVARCHAR(MAX) OUT)
 AS
-	DECLARE @parentHierarchyId HIERARCHYID
-
 	IF EXISTS (SELECT ParentId FROM Nodes WHERE Id = @parentId) OR @parentId = 0
 	BEGIN
 		IF(@parentId < 0)
@@ -51,7 +49,6 @@ AS
 			(@parentId, @name, @description)
 			SET @error = @@IDENTITY
 		END
-
 	END
 	ELSE
 	BEGIN

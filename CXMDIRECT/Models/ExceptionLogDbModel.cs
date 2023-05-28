@@ -1,7 +1,11 @@
-﻿namespace CXMDIRECT.Models
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace CXMDIRECT.Models
 {
-    public class Log
+    public class ExceptionLogDbModel
     {
+        [Key]
         public long Id { get; set; }
         public string? ExtensionType { get; set; }
         public DateTime InstanceData { get; set; }

@@ -1,4 +1,8 @@
 
+using CXMDIRECT.Data;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+
 namespace CXMDIRECT
 {
     public class Program
@@ -6,13 +10,14 @@ namespace CXMDIRECT
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
             // Add services to the container.
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            builder.Services.AddDbContext<CXMDIRECTDbContext>();
 
             var app = builder.Build();
 
@@ -34,6 +39,7 @@ namespace CXMDIRECT
                 name: "default",
                 pattern: "{controller=Tree}/{action=Index}"
             );
+
 
             app.Run();
         }

@@ -1,6 +1,8 @@
 using CXMDIRECT.AbstractClasses;
+using CXMDIRECT.Data;
 using CXMDIRECT.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace CXMDIRECT.Controllers
 {
@@ -99,7 +101,7 @@ namespace CXMDIRECT.Controllers
 
         private Response<dynamic> AddToLogs(System.Exception e)
         {
-            Log log = logControllers.Add(e);
+            ExceptionLog log = logControllers.Add(e);
 
             Response.StatusCode = 500;
 

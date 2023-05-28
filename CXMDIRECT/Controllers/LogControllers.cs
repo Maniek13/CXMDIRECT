@@ -5,7 +5,7 @@ namespace CXMDIRECT.Controllers
 {
     internal class LogControllers : LogControllerAbstractClass
     {
-        internal override Log Add(System.Exception exception)
+        internal override ExceptionLog Add(System.Exception exception)
         {
             if(exception.GetType() == typeof(SecureException))
             {

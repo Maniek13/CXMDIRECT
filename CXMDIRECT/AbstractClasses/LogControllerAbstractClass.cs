@@ -4,6 +4,6 @@ namespace CXMDIRECT.AbstractClasses
 {
     internal abstract class LogControllerAbstractClass
     {
-        internal abstract Log Add(System.Exception exception);
+        internal abstract ExceptionLog Add(System.Exception exception);
     }
 }
