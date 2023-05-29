@@ -9,6 +9,13 @@ namespace CXMDIRECT.Data
 {
     public class CXMDIRECTDbContext : DbContext
     {
+        private readonly string _connectionString;
+        public CXMDIRECTDbContext(string connectionString) 
+        {
+            _connectionString = connectionString;
+        }
+
+        public CXMDIRECTDbContext(){ }
         public DbSet<ExceptionLogDbModel> ExceptionsLogs { get; set; }
         public DbSet<NodeDbModel> Nodes { get; set; }
 
@@ -16,12 +23,16 @@ namespace CXMDIRECT.Data
         {
             if (!optionsBuilder.IsConfigured)
             {
+                optionsBuilder.EnableSensitiveDataLogging();
+
                 var builder = new ConfigurationBuilder()
                        .SetBasePath(Directory.GetCurrentDirectory())
                        .AddJsonFile("appSettings.json", optional: true, reloadOnChange: true);
                 IConfiguration configuration = builder.Build();
 
-                optionsBuilder.UseSqlServer(configuration.GetConnectionString("CXMDIRECTConnection"));
+                string connection = configuration.GetConnectionString(_connectionString) ?? _connectionString;
+
+                optionsBuilder.UseSqlServer(connection);
             }
         }
     }

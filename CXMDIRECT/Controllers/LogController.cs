@@ -5,6 +5,12 @@ namespace CXMDIRECT.Controllers
 {
     internal class LogController : LogControllerAbstractClass
     {
+        private readonly LogDbController _logDbController;
+
+        internal LogController(string dbConnection)
+        {
+            _logDbController = new LogDbController(dbConnection);
+        }
         internal override async Task<ExceptionLog> Add(Exception exception, List<(string name, string value)> parameters)
         {
             
@@ -19,9 +25,7 @@ namespace CXMDIRECT.Controllers
                     StackTrace = exception.StackTrace
                 };
 
-                LogDbController logDbController = new();
-
-                await logDbController.Add(model);
+                await _logDbController.Add(model);
                 
                 return ConvertToExceptionLog(model);
             }

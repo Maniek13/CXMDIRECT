@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace CXMDIRECT.Models
+﻿namespace CXMDIRECT.Models
 {
     public class ExceptionLog
     {

@@ -1,7 +1,4 @@
-
 using CXMDIRECT.Data;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 namespace CXMDIRECT
 {

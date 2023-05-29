@@ -1,22 +1,22 @@
 ﻿using CXMDIRECT.AbstractClasses;
 using CXMDIRECT.Models;
+using System.Data.Common;
 
 namespace CXMDIRECT.Controllers
 {
     internal class NodeController : NodeControllerAbstractClass
     {
+        private readonly NodesDbController _dbController;
+
+        internal NodeController(string dbConnection)
+        {
+            _dbController = new NodesDbController(dbConnection);
+        }
         internal override async Task<Node> Add(int parentId, string name, string description) 
         {
-
             try
             {
-                if (parentId < 0)
-                {
-                    throw new SecureException("The parent id must be greater or equal 0");
-                }
-
-                NodesDbController nodesDbController = new();
-                NodeDbModel node = await nodesDbController.Add(parentId, name, description);
+                NodeDbModel node = await _dbController.Add(parentId, name, description);
 
                 return ConvertToNode(node);
 
@@ -34,18 +34,7 @@ namespace CXMDIRECT.Controllers
         {
             try
             {
-                if (id <= 0)
-                {
-                    throw new SecureException("The node id must be greater 0");
-                }
-                if (parentId < 0)
-                {
-                    throw new SecureException("The paren id must be greater or equal 0");
-                }
-
-                NodesDbController nodesDbController = new();
-
-                return ConvertToNode(nodesDbController.Edit(id, parentId, name, description));
+                return ConvertToNode(_dbController.Edit(id, parentId, name, description));
             }
             catch (SecureException s)
             {
@@ -60,14 +49,7 @@ namespace CXMDIRECT.Controllers
         {
             try
             {
-                if (id < 0)
-                {
-                    throw new SecureException("The node id must be greater 0");
-                }
-
-                NodesDbController nodeDbController = new();
-
-                if (nodeDbController.Delete(id) == false)
+                if (_dbController.Delete(id) == false)
                     throw new SecureException("Problem with delete, check is object exist in database");
 
             }

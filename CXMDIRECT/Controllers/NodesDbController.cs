@@ -1,17 +1,21 @@
 ﻿using CXMDIRECT.AbstractClasses;
 using CXMDIRECT.Data;
 using CXMDIRECT.Models;
-using Microsoft.EntityFrameworkCore.Infrastructure.Internal;
 
 namespace CXMDIRECT.Controllers
 {
-    internal class NodesDbController : NodeDbControllerAbstractClass
+    public class NodesDbController : NodeDbControllerAbstractClass
     {
-        internal override async Task<NodeDbModel> Add(int parentId, string name, string description)
+        public NodesDbController(string connectionString) : base(connectionString) { }
+        public override async Task<NodeDbModel> Add(int parentId, string name, string description)
         {
             try
             {
-                using var db = new CXMDIRECTDbContext();
+                if (parentId < 0)
+                    throw new SecureException("The parent id must be greater or equal 0");
+
+                using var db = new CXMDIRECTDbContext(_connectionString);
+
                 if (parentId != 0 && db.Nodes.Where(el => el.Id == parentId).FirstOrDefault() == null)
                     throw new SecureException("Parent doesn't exist");
 
@@ -35,11 +39,16 @@ namespace CXMDIRECT.Controllers
                 throw new Exception(ex.Message, ex);
             }
         }
-        internal override NodeDbModel Edit(int id, int parentId, string name, string description)
+        public override NodeDbModel Edit(int id, int parentId, string name, string description)
         {
             try
             {
-                using var db = new CXMDIRECTDbContext();
+                if (id <= 0)
+                    throw new SecureException("The node id must be greater 0");
+                if (parentId < 0)
+                    throw new SecureException("The paren id must be greater or equal 0");
+
+                using var db = new CXMDIRECTDbContext(_connectionString);
 
                 NodeDbModel? node = db.Nodes.Where(el => el.Id == id).FirstOrDefault();
 
@@ -67,14 +76,23 @@ namespace CXMDIRECT.Controllers
             }
 
         }
-        internal override bool Delete(int id)
+        public override bool Delete(int id)
         {
             try
             {
-                using var db = new CXMDIRECTDbContext();
+                if (id < 0)
+                    throw new SecureException("The node id must be greater 0");
+
+                using var db = new CXMDIRECTDbContext(_connectionString);
+
+                if (db.Nodes.Where(el => el.Id == id).FirstOrDefault() == null)
+                    throw new SecureException("No object in database");
+
                 if (db.Nodes.Where(el => el.ParentId == id).FirstOrDefault() != null)
                     throw new SecureException("Object have a children, plese delete or edit it first");
-
+                
+                db.ChangeTracker.Clear();
+                db.SaveChanges() ;
                 db.Nodes.Remove(new NodeDbModel()
                 {
                     Id = id,

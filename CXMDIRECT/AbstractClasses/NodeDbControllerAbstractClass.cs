@@ -1,11 +1,14 @@
-﻿using CXMDIRECT.Models;
+﻿using CXMDIRECT.BaseClasses;
+using CXMDIRECT.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CXMDIRECT.AbstractClasses
 {
-    internal abstract class NodeDbControllerAbstractClass
+    public abstract class NodeDbControllerAbstractClass : DbControlerBaseClass
     {
-        internal virtual async Task<NodeDbModel> Add(int parentId, string name, string description) => throw new NotImplementedException();
-        internal abstract NodeDbModel Edit(int id, int parentId, string name, string description);
-        internal abstract bool Delete(int id);
+        public NodeDbControllerAbstractClass(string connectionString) : base(connectionString) { }
+        public virtual async Task<NodeDbModel> Add(int parentId, string name, string description) => throw new NotImplementedException();
+        public abstract NodeDbModel Edit(int id, int parentId, string name, string description);
+        public abstract bool Delete(int id);
     }
 }
