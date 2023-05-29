@@ -92,7 +92,6 @@ namespace CXMDIRECT.Controllers
                     throw new SecureException("Object have a children, plese delete or edit it first");
                 
                 db.ChangeTracker.Clear();
-                db.SaveChanges() ;
                 db.Nodes.Remove(new NodeDbModel()
                 {
                     Id = id,
