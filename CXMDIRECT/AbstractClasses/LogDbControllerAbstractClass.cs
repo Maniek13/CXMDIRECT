@@ -1,5 +1,5 @@
 ﻿using CXMDIRECT.BaseClasses;
-using CXMDIRECT.Models;
+using CXMDIRECT.DbModels;
 
 namespace CXMDIRECT.AbstractClasses
 {

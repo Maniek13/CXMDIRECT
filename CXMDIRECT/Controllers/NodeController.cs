@@ -1,6 +1,7 @@
 ﻿using CXMDIRECT.AbstractClasses;
+using CXMDIRECT.DbControllers;
+using CXMDIRECT.DbModels;
 using CXMDIRECT.Models;
-using System.Data.Common;
 
 namespace CXMDIRECT.Controllers
 {
@@ -63,7 +64,7 @@ namespace CXMDIRECT.Controllers
             }
         }
 
-        private Node ConvertToNode(NodeDbModel node)
+        private static Node ConvertToNode(NodeDbModel node)
         {
             return new Node()
             {

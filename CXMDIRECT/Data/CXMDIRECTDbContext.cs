@@ -1,9 +1,5 @@
-﻿using CXMDIRECT.Models;
+﻿using CXMDIRECT.DbModels;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using static System.Net.Mime.MediaTypeNames;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using System;
 
 namespace CXMDIRECT.Data
 {

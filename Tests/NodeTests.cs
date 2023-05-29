@@ -1,7 +1,7 @@
-using CXMDIRECT.Controllers;
 using CXMDIRECT.Data;
+using CXMDIRECT.DbControllers;
+using CXMDIRECT.DbModels;
 using CXMDIRECT.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace Tests
 {
@@ -19,10 +19,10 @@ namespace Tests
         {
             int id;
 
-            using (CXMDIRECTDbContext db = new CXMDIRECTDbContext(connectionString))
+            using (CXMDIRECTDbContext db = new(connectionString))
             {
 
-                NodeDbModel node = new NodeDbModel()
+                NodeDbModel node = new()
                 {
                     ParentId = 0,
                     Description = "description",
@@ -35,16 +35,16 @@ namespace Tests
             }
 
             NodesDbController nodesDbController = new(connectionString);
-            Assert.IsTrue(nodesDbController.Delete(id));
+            Assert.That(nodesDbController.Delete(id), Is.True);
             Assert.Throws<SecureException>(() => nodesDbController.Delete(2));
 
             Assert.Throws<SecureException>(() => nodesDbController.Delete(-1));
 
 
 
-            using (CXMDIRECTDbContext db = new CXMDIRECTDbContext(connectionString))
+            using (CXMDIRECTDbContext db = new(connectionString))
             {
-                NodeDbModel parent = new NodeDbModel()
+                NodeDbModel parent = new()
                 {
                     ParentId = 0,
                     Description = "description",
@@ -53,7 +53,7 @@ namespace Tests
                 db.Add(parent);
                 db.SaveChanges();
 
-                NodeDbModel child = new NodeDbModel()
+                NodeDbModel child = new()
                 {
                     ParentId = parent.Id,
                     Description = "description",
@@ -77,10 +77,7 @@ namespace Tests
         {
             NodesDbController nodesDbController = new(connectionString);
 
-
             NodeDbModel model = await nodesDbController.Add(0,"nowe", "xxx");
-
-            Assert.IsNotNull(model.Id);
 
             Assert.ThrowsAsync<SecureException>(async () => await nodesDbController.Add(-1, "nowe", "xxx"));
             Assert.ThrowsAsync<SecureException>(async () => await nodesDbController.Add(model.Id+100, "nowe", "xxx"));

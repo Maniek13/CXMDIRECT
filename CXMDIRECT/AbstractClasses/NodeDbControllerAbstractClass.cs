@@ -1,6 +1,5 @@
 ﻿using CXMDIRECT.BaseClasses;
-using CXMDIRECT.Models;
-using Microsoft.AspNetCore.Mvc;
+using CXMDIRECT.DbModels;
 
 namespace CXMDIRECT.AbstractClasses
 {

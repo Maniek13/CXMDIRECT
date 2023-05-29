@@ -1,9 +1,9 @@
 ﻿using CXMDIRECT.AbstractClasses;
 using CXMDIRECT.Data;
-using CXMDIRECT.Models;
+using CXMDIRECT.DbModels;
 using Microsoft.EntityFrameworkCore;
 
-namespace CXMDIRECT.Controllers
+namespace CXMDIRECT.DbControllers
 {
     public class LogDbController : LogDbControllerAbstractClass
     {

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace CXMDIRECT.Models
+namespace CXMDIRECT.DbModels
 {
     public class NodeDbModel
     {

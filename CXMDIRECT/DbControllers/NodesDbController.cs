@@ -1,8 +1,9 @@
 ﻿using CXMDIRECT.AbstractClasses;
 using CXMDIRECT.Data;
+using CXMDIRECT.DbModels;
 using CXMDIRECT.Models;
 
-namespace CXMDIRECT.Controllers
+namespace CXMDIRECT.DbControllers
 {
     public class NodesDbController : NodeDbControllerAbstractClass
     {

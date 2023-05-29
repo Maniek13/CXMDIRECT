@@ -1,7 +1,6 @@
-using CXMDIRECT.Controllers;
 using CXMDIRECT.Data;
-using CXMDIRECT.Models;
-using Microsoft.EntityFrameworkCore;
+using CXMDIRECT.DbControllers;
+using CXMDIRECT.DbModels;
 
 namespace Tests
 {
@@ -21,14 +20,11 @@ namespace Tests
 
             ExceptionLogDbModel log =  await logDbController.Add(new ExceptionLogDbModel());
 
-            Assert.IsNotNull(log);
+            Assert.That(log, Is.Not.Null);
 
-
-            using (CXMDIRECTDbContext db = new CXMDIRECTDbContext(connectionString))
-            {
-                ExceptionLogDbModel? elToCompare = db.ExceptionsLogs.Where(el => el.Id == log.Id).FirstOrDefault();
-                Assert.IsTrue(elToCompare != null);
-            }
+            using CXMDIRECTDbContext db = new(connectionString);
+            ExceptionLogDbModel? elToCompare = db.ExceptionsLogs.Where(el => el.Id == log.Id).FirstOrDefault();
+            Assert.That(elToCompare, Is.Not.EqualTo(null));
         }
     }
 }

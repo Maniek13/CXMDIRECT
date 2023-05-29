@@ -4,6 +4,6 @@
     {
         public SecureException() { }
         public SecureException(string message) : base(message) { }
-        public SecureException(string message, System.Exception inner) : base(message, inner) { }
+        public SecureException(string message, Exception inner) : base(message, inner) { }
     }
 }
