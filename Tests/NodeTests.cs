@@ -71,5 +71,44 @@ namespace Tests
                 db.SaveChanges();
             }
         }
+
+        [Test]
+        public async Task TestaAdd()
+        {
+            NodesDbController nodesDbController = new(connectionString);
+
+
+            NodeDbModel model = await nodesDbController.Add(0,"nowe", "xxx");
+
+            Assert.IsNotNull(model.Id);
+
+            Assert.ThrowsAsync<SecureException>(async () => await nodesDbController.Add(-1, "nowe", "xxx"));
+            Assert.ThrowsAsync<SecureException>(async () => await nodesDbController.Add(model.Id+100, "nowe", "xxx"));
+
+            nodesDbController.Delete(model.Id);
+
+        }
+
+        [Test]
+        public async Task TestaUpdate()
+        {
+            NodesDbController nodesDbController = new(connectionString);
+
+            NodeDbModel model = await nodesDbController.Add(0, "nowe", "xxx");
+
+            NodeDbModel edited = nodesDbController.Edit(model.Id, 0, "edytowane", "nowy opis");
+
+            Assert.That(edited.Name == "edytowane" && edited.Description == "nowy opis");
+
+            Assert.Throws<SecureException>(() => nodesDbController.Edit(-1, 0, "nowe", "xxx"));
+            Assert.Throws<SecureException>(() => nodesDbController.Edit(0, 0, "nowe", "xxx"));
+            Assert.Throws<SecureException>(() => nodesDbController.Edit(edited.Id, -1, "nowe", "xxx"));
+
+            Assert.Throws<SecureException>(() => nodesDbController.Edit(12, 1, "nowe", "xxx"));
+            Assert.Throws<SecureException>(() => nodesDbController.Edit(edited.Id, 5, "nowe", "xxx"));
+
+            nodesDbController.Delete(model.Id);
+
+        }
     }
 }

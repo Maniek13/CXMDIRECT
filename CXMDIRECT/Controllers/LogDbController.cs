@@ -5,16 +5,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CXMDIRECT.Controllers
 {
-    internal class LogDbController : LogDbControllerAbstractClass
+    public class LogDbController : LogDbControllerAbstractClass
     {
-        internal LogDbController(string connectionString) : base(connectionString) { }
-        internal override async Task<ExceptionLogDbModel> Add(ExceptionLogDbModel exception)
+        public LogDbController(string connectionString) : base(connectionString) { }
+        public override async Task<ExceptionLogDbModel> Add(ExceptionLogDbModel exception)
         {
             try
             {
                 using var db = new CXMDIRECTDbContext(_connectionString);
 
-               DbContextOptionsBuilder dbOptionsBuilder = new DbContextOptionsBuilder();
+               DbContextOptionsBuilder dbOptionsBuilder = new();
 
                 await db.ExceptionsLogs.AddAsync(exception);
                 await db.SaveChangesAsync();
@@ -24,7 +24,6 @@ namespace CXMDIRECT.Controllers
             {
                 throw new Exception(ex.Message, ex);
             }
-
         }
     }
 }
