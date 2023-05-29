@@ -1,4 +1,5 @@
 using CXMDIRECT.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace CXMDIRECT
 {
@@ -14,7 +15,8 @@ namespace CXMDIRECT
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            builder.Services.AddDbContext<CXMDIRECTDbContext>();
+            builder.Services.AddDbContext<CXMDIRECTDbContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("CXMDIRECTConnection")));
 
             var app = builder.Build();
             // Configure the HTTP request pipeline.

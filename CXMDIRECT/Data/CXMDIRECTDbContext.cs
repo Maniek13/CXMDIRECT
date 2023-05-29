@@ -14,8 +14,7 @@ namespace CXMDIRECT.Data
         {
             _connectionString = connectionString;
         }
-
-        public CXMDIRECTDbContext(){ }
+        public CXMDIRECTDbContext(DbContextOptions options) : base(options){ }
         public DbSet<ExceptionLogDbModel> ExceptionsLogs { get; set; }
         public DbSet<NodeDbModel> Nodes { get; set; }
 

@@ -14,7 +14,7 @@ namespace CXMDIRECT.Controllers
             {
                 using var db = new CXMDIRECTDbContext(_connectionString);
 
-               DbContextOptionsBuilder dbOptionsBuilder = new();
+                DbContextOptionsBuilder dbOptionsBuilder = new();
 
                 await db.ExceptionsLogs.AddAsync(exception);
                 await db.SaveChangesAsync();

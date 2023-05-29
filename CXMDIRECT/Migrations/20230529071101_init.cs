@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CXMDIRECT.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -18,7 +18,7 @@ namespace CXMDIRECT.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ExtensionType = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    InstanceDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    InstanceDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Parameters = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Message = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     StackTrace = table.Column<string>(type: "nvarchar(max)", nullable: true)

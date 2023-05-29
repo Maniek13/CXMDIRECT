@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CXMDIRECT.Migrations
 {
     [DbContext(typeof(CXMDIRECTDbContext))]
-    [Migration("20230528201719_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20230529071101_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -36,7 +36,7 @@ namespace CXMDIRECT.Migrations
                     b.Property<string>("ExtensionType")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("InstanceDate")
+                    b.Property<DateTime?>("InstanceDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Message")
