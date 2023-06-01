@@ -36,6 +36,16 @@ namespace CXMDIRECT.NetControllers
             return View("Index", res);
         }
 
+        [HttpPost]
+        public ActionResult GetTest()
+        {
+            int.TryParse(Request.Form["id"], out int id);
+
+            var res = treeController.GetNode(id);
+
+            return View("Index", res);
+        }
+
         public ActionResult EditTest()
         {
             int.TryParse(Request.Form["id"], out int id);

@@ -3,6 +3,12 @@
     ViewBag.Title = "Test page";
 }
 
+<p>Get node</p>
+@using (Html.BeginForm("GetTest", "TreeTests", FormMethod.Post))
+{
+    <input type="number" name="id" />
+    <input type="submit" value="Submit" />
+}
 
 <p>Add node</p>
 @using (Html.BeginForm("AddTest", "TreeTests", FormMethod.Post))

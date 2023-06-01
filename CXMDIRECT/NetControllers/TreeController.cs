@@ -48,6 +48,35 @@ namespace CXMDIRECT.NetControllers
             }
         }
 
+        [HttpGet("{id}")]
+        public Response<dynamic> GetNode(int id)
+        {
+            List<(string name, string value)> parameters = new()
+            {
+                new("id", id.ToString())
+            };
+
+            try
+            {
+                Node node = nodeController.Get(id);
+
+                return new Response<dynamic>()
+                {
+                    Type = "GetNode",
+                    Id = 1,
+                    Data = node
+                };
+            }
+            catch (SecureException s)
+            {
+                return AddToLogs(s, parameters);
+            }
+            catch (Exception e)
+            {
+                return AddToLogs(e, parameters);
+            }
+        }
+
         [HttpPost()]
         public Response<dynamic> AddNode(int parrentId, string name, string description = "")
         {

@@ -64,6 +64,23 @@ namespace CXMDIRECT.Controllers
             }
         }
 
+        internal override Node Get(int id)
+        {
+            try
+            {
+                return ConvertToNode(_dbController.Get(id));
+
+            }
+            catch (SecureException s)
+            {
+                throw new SecureException(s.Message);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex);
+            }
+        }
+
         private static Node ConvertToNode(NodeDbModel node)
         {
             return new Node()
