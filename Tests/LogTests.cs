@@ -6,7 +6,7 @@ namespace Tests
 {
     public class LogTests
     {
-        public string connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=G:\\Programowanie\\CXMDIRECT\\Tests\\TestDatabase.mdf;Integrated Security=True";
+        public string connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=D:\Mariusz\Programowanie\CXMDIRECT\CXMDIRECT\Tests\TestDb.mdf;Integrated Security = True";
         [SetUp]
         public void Setup()
         {

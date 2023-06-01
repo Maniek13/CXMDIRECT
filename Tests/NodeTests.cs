@@ -2,12 +2,13 @@ using CXMDIRECT.Data;
 using CXMDIRECT.DbControllers;
 using CXMDIRECT.DbModels;
 using CXMDIRECT.Models;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Tests
 {
     public class NodeTests
     {
-        public string connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=G:\\Programowanie\\CXMDIRECT\\Tests\\TestDatabase.mdf;Integrated Security=True";
+        public string connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=D:\Mariusz\Programowanie\CXMDIRECT\CXMDIRECT\Tests\TestDb.mdf;Integrated Security = True";
         [SetUp]
         public void Setup()
         {
@@ -70,6 +71,35 @@ namespace Tests
                 db.Remove(parent);
                 db.SaveChanges();
             }
+        }
+        [Test]
+        public void TestGet()
+        {
+            int id;
+            NodeDbModel node = new();
+            using (CXMDIRECTDbContext db = new(connectionString))
+            {
+
+                node = new()
+                {
+                    ParentId = 0,
+                    Description = "description",
+                    Name = "name"
+                };
+
+                db.Add(node);
+                db.SaveChanges();
+                id = node.Id;
+
+                
+            }
+            NodesDbController nodesDbController = new(connectionString);
+
+            Assert.AreEqual(node.Id, nodesDbController.Get(id).Id);
+            Assert.AreEqual(node.ParentId, nodesDbController.Get(id).ParentId);
+            Assert.Throws<SecureException>(() => nodesDbController.Get(id+1));
+
+            nodesDbController.Delete(id);
         }
 
         [Test]
