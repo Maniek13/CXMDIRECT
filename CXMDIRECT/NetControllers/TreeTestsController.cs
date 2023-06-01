@@ -40,7 +40,7 @@ namespace CXMDIRECT.NetControllers
 
             return View("Index", res);
         }
-
+        [HttpPost]
         public ActionResult EditTest()
         {
             int.TryParse(Request.Form["id"], out int id);
@@ -52,6 +52,7 @@ namespace CXMDIRECT.NetControllers
 
             return View("Index", res);
         }
+        [HttpPost]
         public ActionResult DeleteTest()
         {
             int.TryParse(Request.Form["id"], out int id);
