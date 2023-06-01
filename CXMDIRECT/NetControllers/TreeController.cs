@@ -19,12 +19,6 @@ namespace CXMDIRECT.NetControllers
             nodeController = new NodeController(dbConnectionName);
         }
 
-        [HttpGet]
-        public IActionResult Index()
-        {
-            return View();
-        }
-
         [HttpDelete("{id}")]
         public Response<dynamic> DeleteNode(int id)
         {

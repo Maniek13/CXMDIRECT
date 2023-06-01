@@ -36,8 +36,8 @@ namespace CXMDIRECT
             app.MapControllers();
 
             app.MapControllerRoute(
-                name: "default",
-                pattern: "{controller=Tree}/{action=Index}"
+              name: "default",
+              pattern: "{controller=TreeTests}/{action=Index}"
             );
 
 

@@ -1,0 +1,57 @@
+﻿@model CXMDIRECT.Models.Response<dynamic>
+@{
+    ViewBag.Title = "Test page";
+}
+
+
+<p>Add node</p>
+@using (Html.BeginForm("AddTest", "TreeTests", FormMethod.Post))
+{
+    <input type="number" name="parrentId" />
+    <input type="text" name="name" />
+    <input type="text" name="description" />
+    <input type="submit" value="Submit" />
+}
+
+<p>Edit node</p>
+@using (Html.BeginForm("EditTest", "TreeTests", FormMethod.Post))
+{
+    <input type="id" name="id" />
+    <input type="number" name="parrentId" />
+    <input type="text" name="name" />
+    <input type="text" name="description" />
+    <input type="submit" value="Submit" />
+}
+
+<p>Delete node</p>
+@using (Html.BeginForm("DeleteTest", "TreeTests", FormMethod.Post))
+{
+    <input type="number" name="id" />
+    <input type="submit" value="Submit" />
+}
+
+<h3>Results</h3>
+@if (Model != null)
+{
+    <table>
+        <tr>
+            <td>@Model.Type</td>
+            <td>@Model.Id</td>
+
+            <td>Data: 
+            @if (Model.Data.GetType() == typeof(CXMDIRECT.Models.Node))
+            {
+                <a>Id: @Model.Data.Id</a>
+                <a>Parent Id: @Model.Data.ParentId</a>
+                <a>Name: @Model.Data.Name</a>
+                <a>Description: @Model.Data.Description</a>
+            }
+            @if (Model.Data.GetType() == typeof(CXMDIRECT.Models.ExceptionData))
+            {
+                <a>@Model.Data.Message</a>
+            }
+
+            </td>
+        </tr>
+    </table>
+}
