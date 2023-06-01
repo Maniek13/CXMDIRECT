@@ -1,8 +1,9 @@
 using CXMDIRECT.AbstractClasses;
+using CXMDIRECT.Controllers;
 using CXMDIRECT.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CXMDIRECT.Controllers
+namespace CXMDIRECT.NetControllers
 {
     [ApiController]
     [Route("[controller]/[action]")]
@@ -12,7 +13,7 @@ namespace CXMDIRECT.Controllers
         private readonly NodeControllerAbstractClass nodeController;
         private readonly string dbConnectionName = "CXMDIRECTConnection";
         public TreeController()
-        { 
+        {
             logControllers = new LogController(dbConnectionName);
             nodeController = new NodeController(dbConnectionName);
         }
@@ -21,8 +22,8 @@ namespace CXMDIRECT.Controllers
         public IActionResult Index()
         {
             return Empty;
-        }  
-        
+        }
+
         [HttpDelete("{id}")]
         public Response<dynamic> DeleteNode(int id)
         {
@@ -42,11 +43,11 @@ namespace CXMDIRECT.Controllers
                     Data = true
                 };
             }
-            catch(SecureException s)
+            catch (SecureException s)
             {
                 return AddToLogs(s, parameters);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return AddToLogs(e, parameters);
             }
@@ -64,8 +65,8 @@ namespace CXMDIRECT.Controllers
 
             try
             {
-                Task<Node> task = Task.Run<Node>(async () => await nodeController.Add(parrentId, name, description));
-                
+                Task<Node> task = Task.Run(async () => await nodeController.Add(parrentId, name, description));
+
                 Node node = task.Result;
 
                 return new Response<dynamic>()
@@ -77,7 +78,7 @@ namespace CXMDIRECT.Controllers
             }
             catch (AggregateException ae)
             {
-                if(ae.InnerException != null)
+                if (ae.InnerException != null)
                     return AddToLogs(ae.InnerException, parameters);
                 else
                     return AddToLogs(ae, parameters);
@@ -134,7 +135,7 @@ namespace CXMDIRECT.Controllers
 
         private Response<dynamic> AddToLogs(Exception exception, List<(string name, string value)> parameters)
         {
-            Task<ExceptionLog> task = Task.Run<ExceptionLog>(async () => await logControllers.Add(exception, parameters));
+            Task<ExceptionLog> task = Task.Run(async () => await logControllers.Add(exception, parameters));
             ExceptionLog log = task.Result;
 
             Response.StatusCode = 500;
