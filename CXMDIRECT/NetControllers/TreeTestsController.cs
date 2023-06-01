@@ -1,8 +1,4 @@
-using CXMDIRECT.AbstractClasses;
-using CXMDIRECT.Controllers;
-using CXMDIRECT.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace CXMDIRECT.NetControllers
 {
@@ -23,6 +19,15 @@ namespace CXMDIRECT.NetControllers
         {
             return View();
         }
+        [HttpPost]
+        public ActionResult GetTest()
+        {
+            int.TryParse(Request.Form["id"], out int id);
+
+            var res = treeController.GetNode(id);
+
+            return View("Index", res);
+        }
 
         [HttpPost]
         public ActionResult AddTest()
@@ -32,16 +37,6 @@ namespace CXMDIRECT.NetControllers
             string description = Request.Form["description"];
 
             var res = treeController.AddNode(parrentId, name, description);
-
-            return View("Index", res);
-        }
-
-        [HttpPost]
-        public ActionResult GetTest()
-        {
-            int.TryParse(Request.Form["id"], out int id);
-
-            var res = treeController.GetNode(id);
 
             return View("Index", res);
         }

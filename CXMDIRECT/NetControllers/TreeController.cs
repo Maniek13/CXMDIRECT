@@ -19,35 +19,6 @@ namespace CXMDIRECT.NetControllers
             nodeController = new NodeController(dbConnectionName);
         }
 
-        [HttpDelete("{id}")]
-        public Response<dynamic> DeleteNode(int id)
-        {
-            List<(string name, string value)> parameters = new()
-            {
-                new("id", id.ToString())
-            };
-
-            try
-            {
-                nodeController.Delete(id);
-
-                return new Response<dynamic>()
-                {
-                    Type = "DeleteNode",
-                    Id = 1,
-                    Data = true
-                };
-            }
-            catch (SecureException s)
-            {
-                return AddToLogs(s, parameters);
-            }
-            catch (Exception e)
-            {
-                return AddToLogs(e, parameters);
-            }
-        }
-
         [HttpGet("{id}")]
         public Response<dynamic> GetNode(int id)
         {
@@ -156,7 +127,34 @@ namespace CXMDIRECT.NetControllers
             }
         }
 
+        [HttpDelete("{id}")]
+        public Response<dynamic> DeleteNode(int id)
+        {
+            List<(string name, string value)> parameters = new()
+            {
+                new("id", id.ToString())
+            };
 
+            try
+            {
+                nodeController.Delete(id);
+
+                return new Response<dynamic>()
+                {
+                    Type = "DeleteNode",
+                    Id = 1,
+                    Data = true
+                };
+            }
+            catch (SecureException s)
+            {
+                return AddToLogs(s, parameters);
+            }
+            catch (Exception e)
+            {
+                return AddToLogs(e, parameters);
+            }
+        }
         private Response<dynamic> AddToLogs(Exception exception, List<(string name, string value)> parameters)
         {
             Task<ExceptionLog> task = Task.Run(async () => await logControllers.Add(exception, parameters));

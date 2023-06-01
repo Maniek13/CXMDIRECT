@@ -8,6 +8,32 @@ namespace CXMDIRECT.DbControllers
     public class NodesDbController : NodeDbControllerAbstractClass
     {
         public NodesDbController(string connectionString) : base(connectionString) { }
+
+        public override NodeDbModel Get(int id)
+        {
+            try
+            {
+                if (id < 0)
+                    throw new SecureException("The node id must be greater 0");
+
+                using var db = new CXMDIRECTDbContext(_connectionString);
+
+                NodeDbModel node = db.Nodes.Where(el => el.Id == id).FirstOrDefault();
+
+                if (node == null)
+                    throw new SecureException($"No node with id {id}");
+
+                return node;
+            }
+            catch (SecureException s)
+            {
+                throw new SecureException(s.Message);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex);
+            }
+        }
         public override async Task<NodeDbModel> Add(int parentId, string name, string description)
         {
             try
@@ -100,32 +126,6 @@ namespace CXMDIRECT.DbControllers
 
                 db.SaveChanges();
                 return true;
-            }
-            catch (SecureException s)
-            {
-                throw new SecureException(s.Message);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message, ex);
-            }
-        }
-
-        public override NodeDbModel Get(int id)
-        {
-            try
-            {
-                if (id < 0)
-                    throw new SecureException("The node id must be greater 0");
-
-                using var db = new CXMDIRECTDbContext(_connectionString);
-
-                NodeDbModel node = db.Nodes.Where(el => el.Id == id).FirstOrDefault();
-
-                if (node == null)
-                    throw new SecureException($"No node with id {id}");
-
-                return node;
             }
             catch (SecureException s)
             {

@@ -13,6 +13,22 @@ namespace CXMDIRECT.Controllers
         {
             _dbController = new NodesDbController(dbConnection);
         }
+        internal override Node Get(int id)
+        {
+            try
+            {
+                return ConvertToNode(_dbController.Get(id));
+
+            }
+            catch (SecureException s)
+            {
+                throw new SecureException(s.Message);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex);
+            }
+        }
         internal override async Task<Node> Add(int parentId, string name, string description) 
         {
             try
@@ -63,24 +79,6 @@ namespace CXMDIRECT.Controllers
                 throw new Exception(ex.Message, ex);
             }
         }
-
-        internal override Node Get(int id)
-        {
-            try
-            {
-                return ConvertToNode(_dbController.Get(id));
-
-            }
-            catch (SecureException s)
-            {
-                throw new SecureException(s.Message);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message, ex);
-            }
-        }
-
         private static Node ConvertToNode(NodeDbModel node)
         {
             return new Node()
