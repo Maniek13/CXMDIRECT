@@ -2,12 +2,13 @@ using CXMDIRECT.AbstractClasses;
 using CXMDIRECT.Controllers;
 using CXMDIRECT.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace CXMDIRECT.NetControllers
 {
     [ApiController]
     [Route("[controller]/[action]")]
-    public class TreeController : ControllerBase
+    public class TreeController : Controller
     {
         private readonly LogControllerAbstractClass logControllers;
         private readonly NodeControllerAbstractClass nodeController;
@@ -21,7 +22,7 @@ namespace CXMDIRECT.NetControllers
         [HttpGet]
         public IActionResult Index()
         {
-            return Empty;
+            return View();
         }
 
         [HttpDelete("{id}")]
