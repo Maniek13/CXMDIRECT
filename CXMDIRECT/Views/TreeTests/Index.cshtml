@@ -44,9 +44,9 @@
     <input type="submit" value="Submit" />
 }
 
-<h3>Results</h3>
-@if (Model != null)
+@if (Model != null && Model.Data.GetType() != typeof(CXMDIRECT.Models.Error))
 {
+    <h3>Results</h3>
     <table>
         <tr>
             <td>@Model.Type</td>
@@ -69,3 +69,9 @@
         </tr>
     </table>
 }
+
+@if(Model != null && Model.Data.GetType() == typeof(CXMDIRECT.Models.Error))
+{
+    <p style="color:red;">Error: @Model.Data.Message</p>
+}
+

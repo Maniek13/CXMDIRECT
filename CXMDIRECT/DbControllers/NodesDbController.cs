@@ -20,10 +20,7 @@ namespace CXMDIRECT.DbControllers
 
                 NodeDbModel node = db.Nodes.Where(el => el.Id == id).FirstOrDefault();
 
-                if (node == null)
-                    throw new SecureException($"No node with id {id}");
-
-                return node;
+                return node ?? throw new SecureException($"No node with id {id}");
             }
             catch (SecureException s)
             {

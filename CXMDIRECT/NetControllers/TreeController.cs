@@ -12,11 +12,11 @@ namespace CXMDIRECT.NetControllers
     {
         private readonly LogControllerAbstractClass logControllers;
         private readonly NodeControllerAbstractClass nodeController;
-        private readonly string dbConnectionName = "CXMDIRECTConnection";
+        private readonly string connectionString = "CXMDIRECTConnection";
         public TreeController()
         {
-            logControllers = new LogController(dbConnectionName);
-            nodeController = new NodeController(dbConnectionName);
+            logControllers = new LogController(connectionString);
+            nodeController = new NodeController(connectionString);
         }
 
         [HttpGet("{id}")]
@@ -148,10 +148,14 @@ namespace CXMDIRECT.NetControllers
             }
             catch (SecureException s)
             {
+
+                Response.StatusCode = 500;
                 return AddToLogs(s, parameters);
             }
             catch (Exception e)
             {
+
+                Response.StatusCode = 500;
                 return AddToLogs(e, parameters);
             }
         }
@@ -160,7 +164,6 @@ namespace CXMDIRECT.NetControllers
             Task<ExceptionLog> task = Task.Run(async () => await logControllers.Add(exception, parameters));
             ExceptionLog log = task.Result;
 
-            Response.StatusCode = 500;
 
             return new Response<dynamic>()
             {

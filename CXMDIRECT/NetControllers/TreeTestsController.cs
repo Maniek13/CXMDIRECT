@@ -1,3 +1,4 @@
+using CXMDIRECT.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CXMDIRECT.NetControllers
@@ -22,7 +23,18 @@ namespace CXMDIRECT.NetControllers
         [HttpPost]
         public ActionResult GetTest()
         {
-            int.TryParse(Request.Form["id"], out int id);
+            bool isId = int.TryParse(Request.Form["id"], out int id);
+
+            if(!isId)
+            {
+                return View("index", new Response<dynamic>()
+                {
+                    Data = new Error()
+                    {
+                        Message = "Please set id"
+                    }
+                });
+            }
 
             var res = treeController.GetNode(id);
 
@@ -32,9 +44,30 @@ namespace CXMDIRECT.NetControllers
         [HttpPost]
         public ActionResult AddTest()
         {
-            int.TryParse(Request.Form["parrentId"], out int parrentId);
-            string name = Request.Form["name"];
-            string description = Request.Form["description"];
+            bool isParrentId = int.TryParse(Request.Form["parrentId"], out int parrentId);
+            string? name = Request.Form["name"];
+            string? description = Request.Form["description"];
+
+            if (!isParrentId)
+            {
+                return View("index", new Response<dynamic>()
+                {
+                    Data = new Error()
+                    {
+                        Message = "Please set parrent id"
+                    }
+                });
+            }
+            if (string.IsNullOrEmpty(name))
+            {
+                return View("index", new Response<dynamic>()
+                {
+                    Data = new Error()
+                    {
+                        Message = "Please set name"
+                    }
+                });
+            }
 
             var res = treeController.AddNode(parrentId, name, description);
 
@@ -43,10 +76,41 @@ namespace CXMDIRECT.NetControllers
         [HttpPost]
         public ActionResult EditTest()
         {
-            int.TryParse(Request.Form["id"], out int id);
-            int.TryParse(Request.Form["parrentId"], out int parrentId);
-            string name = Request.Form["name"];
-            string description = Request.Form["description"];
+            bool isId = int.TryParse(Request.Form["id"], out int id);
+            bool isParrentId = int.TryParse(Request.Form["parrentId"], out int parrentId);
+            string? name = Request.Form["name"];
+            string? description = Request.Form["description"];
+
+            if (!isId)
+            {
+                return View("index", new Response<dynamic>()
+                {
+                    Data = new Error()
+                    {
+                        Message = "Please set id"
+                    }
+                });
+            }
+            if (!isParrentId)
+            {
+                return View("index", new Response<dynamic>()
+                {
+                    Data = new Error()
+                    {
+                        Message = "Please set parrent id"
+                    }
+                });
+            }
+            if (string.IsNullOrEmpty(name))
+            {
+                return View("index", new Response<dynamic>()
+                {
+                    Data = new Error()
+                    {
+                        Message = "Please set name"
+                    }
+                });
+            }
 
             var res = treeController.EditNode(id, parrentId, name, description);
 
@@ -55,7 +119,18 @@ namespace CXMDIRECT.NetControllers
         [HttpPost]
         public ActionResult DeleteTest()
         {
-            int.TryParse(Request.Form["id"], out int id);
+            bool isId = int.TryParse(Request.Form["id"], out int id);
+
+            if (!isId)
+            {
+                return View("index", new Response<dynamic>()
+                {
+                    Data = new Error()
+                    {
+                        Message = "Please set id"
+                    }
+                });
+            }
 
             var res = treeController.DeleteNode(id);
 
