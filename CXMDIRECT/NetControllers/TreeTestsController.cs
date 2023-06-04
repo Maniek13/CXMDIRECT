@@ -21,11 +21,9 @@ namespace CXMDIRECT.NetControllers
             return View();
         }
         [HttpPost]
-        public ActionResult GetTest()
+        public ActionResult GetTest([FromForm]int? id)
         {
-            bool isId = int.TryParse(Request.Form["id"], out int id);
-
-            if(!isId)
+            if(id == null)
             {
                 return View("index", new Response<dynamic>()
                 {
@@ -36,19 +34,15 @@ namespace CXMDIRECT.NetControllers
                 });
             }
 
-            var res = treeController.GetNode(id);
+            var res = treeController.GetNode((int)id);
 
             return View("Index", res);
         }
 
         [HttpPost]
-        public ActionResult AddTest()
+        public ActionResult AddTest([FromForm]int? parrentId, [FromForm]string? name, [FromForm]string? description)
         {
-            bool isParrentId = int.TryParse(Request.Form["parrentId"], out int parrentId);
-            string? name = Request.Form["name"];
-            string? description = Request.Form["description"];
-
-            if (!isParrentId)
+            if (parrentId == null)
             {
                 return View("index", new Response<dynamic>()
                 {
@@ -69,19 +63,14 @@ namespace CXMDIRECT.NetControllers
                 });
             }
 
-            var res = treeController.AddNode(parrentId, name, description);
+            var res = treeController.AddNode((int)parrentId, name, description);
 
             return View("Index", res);
         }
         [HttpPost]
-        public ActionResult EditTest()
+        public ActionResult EditTest([FromForm]int? id, [FromForm]int? parrentId, [FromForm]string? name, [FromForm]string? description)
         {
-            bool isId = int.TryParse(Request.Form["id"], out int id);
-            bool isParrentId = int.TryParse(Request.Form["parrentId"], out int parrentId);
-            string? name = Request.Form["name"];
-            string? description = Request.Form["description"];
-
-            if (!isId)
+            if (id == null)
             {
                 return View("index", new Response<dynamic>()
                 {
@@ -91,7 +80,7 @@ namespace CXMDIRECT.NetControllers
                     }
                 });
             }
-            if (!isParrentId)
+            if (parrentId == null)
             {
                 return View("index", new Response<dynamic>()
                 {
@@ -112,16 +101,14 @@ namespace CXMDIRECT.NetControllers
                 });
             }
 
-            var res = treeController.EditNode(id, parrentId, name, description);
+            var res = treeController.EditNode((int)id, (int)parrentId, name, description);
 
             return View("Index", res);
         }
         [HttpPost]
-        public ActionResult DeleteTest()
+        public ActionResult DeleteTest([FromForm]int? id)
         {
-            bool isId = int.TryParse(Request.Form["id"], out int id);
-
-            if (!isId)
+            if (id == null)
             {
                 return View("index", new Response<dynamic>()
                 {
@@ -132,7 +119,7 @@ namespace CXMDIRECT.NetControllers
                 });
             }
 
-            var res = treeController.DeleteNode(id);
+            var res = treeController.DeleteNode((int)id);
 
             return View("Index", res);
         }
