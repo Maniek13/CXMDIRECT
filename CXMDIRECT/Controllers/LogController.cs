@@ -13,7 +13,7 @@ namespace CXMDIRECT.Controllers
         {
             _logDbController = new LogDbController(dbConnection);
         }
-        internal override async Task<ExceptionLog> Add(Exception exception, List<(string name, string value)> parameters)
+        internal override async Task<ExceptionLog> Add(Exception exception, List<(string name, string? value)> parameters)
         {
             
             try
@@ -36,17 +36,19 @@ namespace CXMDIRECT.Controllers
                 throw new Exception(ex.Message, ex);
             }
         }
+        #region private functions
         private static ExceptionLog ConvertToExceptionLog(ExceptionLogDbModel model)
         {
             return new ExceptionLog
             {
                 Id = model.Id,
-                ExtensionType = model.ExtensionType,
+                ExtensionType = model.ExtensionType ??= "",
                 InstanceDate = model.InstanceDate,
                 Parameters = model.Parameters,
                 Message = model.ExtensionType == typeof(SecureException).Name ? model.Message : $"{model.Message} ID = {model.Id}",
                 StackTrace = model.StackTrace
             };
         }
+        #endregion
     }
 }

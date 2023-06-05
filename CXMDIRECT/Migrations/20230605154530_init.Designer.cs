@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CXMDIRECT.Migrations
 {
     [DbContext(typeof(CXMDIRECTDbContext))]
-    [Migration("20230529071101_init")]
+    [Migration("20230605154530_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -25,7 +25,7 @@ namespace CXMDIRECT.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("CXMDIRECT.Models.ExceptionLogDbModel", b =>
+            modelBuilder.Entity("CXMDIRECT.DbModels.ExceptionLogDbModel", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -53,7 +53,7 @@ namespace CXMDIRECT.Migrations
                     b.ToTable("ExceptionsLogs");
                 });
 
-            modelBuilder.Entity("CXMDIRECT.Models.NodeDbModel", b =>
+            modelBuilder.Entity("CXMDIRECT.DbModels.NodeDbModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -68,7 +68,7 @@ namespace CXMDIRECT.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ParentId")
+                    b.Property<int>("ParentId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");

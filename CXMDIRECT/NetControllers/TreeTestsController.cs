@@ -8,8 +8,8 @@ namespace CXMDIRECT.NetControllers
     [Route("[controller]/[action]")]
     public class TreeTestsController : Controller
     {
-      
-        TreeController treeController;
+
+        readonly TreeController treeController;
 
         public TreeTestsController()
         {
@@ -20,6 +20,7 @@ namespace CXMDIRECT.NetControllers
         {
             return View();
         }
+
         [HttpPost]
         public ActionResult GetTest([FromForm]int? id)
         {
@@ -42,16 +43,6 @@ namespace CXMDIRECT.NetControllers
         [HttpPost]
         public ActionResult AddTest([FromForm]int? parrentId, [FromForm]string? name, [FromForm]string? description)
         {
-            if (parrentId == null)
-            {
-                return View("index", new Response<dynamic>()
-                {
-                    Data = new Error()
-                    {
-                        Message = "Please set parrent id"
-                    }
-                });
-            }
             if (string.IsNullOrEmpty(name))
             {
                 return View("index", new Response<dynamic>()
@@ -63,10 +54,11 @@ namespace CXMDIRECT.NetControllers
                 });
             }
 
-            var res = treeController.AddNode((int)parrentId, name, description);
+            var res = treeController.AddNode(parrentId, name, description);
 
             return View("Index", res);
         }
+
         [HttpPost]
         public ActionResult EditTest([FromForm]int? id, [FromForm]int? parrentId, [FromForm]string? name, [FromForm]string? description)
         {
@@ -105,6 +97,7 @@ namespace CXMDIRECT.NetControllers
 
             return View("Index", res);
         }
+
         [HttpPost]
         public ActionResult DeleteTest([FromForm]int? id)
         {

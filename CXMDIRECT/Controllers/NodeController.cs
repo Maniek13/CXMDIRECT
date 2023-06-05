@@ -29,7 +29,7 @@ namespace CXMDIRECT.Controllers
                 throw new Exception(ex.Message, ex);
             }
         }
-        internal override async Task<Node> Add(int parentId, string name, string description) 
+        internal override async Task<Node> Add(int? parentId, string name, string? description) 
         {
             try
             {
@@ -47,7 +47,7 @@ namespace CXMDIRECT.Controllers
                 throw new Exception(ex.Message, ex);
             }
         }
-        internal override Node Edit(int id, int parentId, string name, string description)
+        internal override Node Edit(int id, int parentId, string name, string? description)
         {
             try
             {
@@ -79,6 +79,7 @@ namespace CXMDIRECT.Controllers
                 throw new Exception(ex.Message, ex);
             }
         }
+        #region private functions
         private static Node ConvertToNode(NodeDbModel node)
         {
             return new Node()
@@ -89,5 +90,6 @@ namespace CXMDIRECT.Controllers
                 Description = node.Description
             };
         }
+        #endregion
     }
 }

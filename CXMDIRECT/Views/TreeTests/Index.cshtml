@@ -51,27 +51,24 @@
         <tr>
             <td>@Model.Type</td>
             <td>@Model.Id</td>
-
             <td>Data: 
-            @if (Model.Data.GetType() == typeof(CXMDIRECT.Models.Node))
-            {
-                <a>Id: @Model.Data.Id</a>
-                <a>Parent Id: @Model.Data.ParentId</a>
-                <a>Name: @Model.Data.Name</a>
-                <a>Description: @Model.Data.Description</a>
-            }
-            @if (Model.Data.GetType() == typeof(CXMDIRECT.Models.ExceptionData))
-            {
-                <a>@Model.Data.Message</a>
-            }
-
+                @if (Model.Data.GetType() == typeof(CXMDIRECT.Models.Node))
+                {
+                    <a>Id: @Model.Data.Id</a>
+                    <a>Parent Id: @Model.Data.ParentId</a>
+                    <a>Name: @Model.Data.Name</a>
+                    <a>Description: @Model.Data.Description</a>
+                }
+                @if (Model.Data.GetType() == typeof(CXMDIRECT.Models.ExceptionData))
+                {
+                    <a>@Model.Data.Message</a>
+                }
             </td>
         </tr>
     </table>
 }
 
-@if(Model != null && Model.Data.GetType() == typeof(CXMDIRECT.Models.Error))
+@if (Model != null && Model.Data.GetType() == typeof(CXMDIRECT.Models.Error))
 {
     <p style="color:red;">Error: @Model.Data.Message</p>
 }
-

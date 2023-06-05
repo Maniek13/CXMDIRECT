@@ -32,7 +32,6 @@ namespace CXMDIRECT
 
             app.UseAuthorization();
 
-
             app.MapControllers();
 
             app.MapControllerRoute(

@@ -18,7 +18,7 @@ namespace CXMDIRECT.DbControllers
 
                 using var db = new CXMDIRECTDbContext(_connectionString);
 
-                NodeDbModel node = db.Nodes.Where(el => el.Id == id).FirstOrDefault();
+                NodeDbModel? node = db.Nodes.Where(el => el.Id == id).FirstOrDefault();
 
                 return node ?? throw new SecureException($"No node with id {id}");
             }
@@ -31,21 +31,27 @@ namespace CXMDIRECT.DbControllers
                 throw new Exception(ex.Message, ex);
             }
         }
-        public override async Task<NodeDbModel> Add(int parentId, string name, string description)
+        public override async Task<NodeDbModel> Add(int? parentId, string name, string? description)
         {
             try
             {
+                parentId ??= 0;
+
                 if (parentId < 0)
                     throw new SecureException("The parent id must be greater or equal 0");
+
+                if (string.IsNullOrEmpty(name))
+                    throw new SecureException("The name can't be empty");
 
                 using var db = new CXMDIRECTDbContext(_connectionString);
 
                 if (parentId != 0 && db.Nodes.Where(el => el.Id == parentId).FirstOrDefault() == null)
                     throw new SecureException("Parent doesn't exist");
 
+
                 NodeDbModel node = new()
                 {
-                    ParentId = parentId,
+                    ParentId = (int)parentId,
                     Name = name,
                     Description = description
                 };
@@ -63,7 +69,7 @@ namespace CXMDIRECT.DbControllers
                 throw new Exception(ex.Message, ex);
             }
         }
-        public override NodeDbModel Edit(int id, int parentId, string name, string description)
+        public override NodeDbModel Edit(int id, int parentId, string name, string? description)
         {
             try
             {
@@ -74,10 +80,8 @@ namespace CXMDIRECT.DbControllers
 
                 using var db = new CXMDIRECTDbContext(_connectionString);
 
-                NodeDbModel? node = db.Nodes.Where(el => el.Id == id).FirstOrDefault();
+                NodeDbModel node = db.Nodes.Where(el => el.Id == id).FirstOrDefault() ?? throw new SecureException("Node doesn't exist");
 
-                if (parentId != 0 && node == null)
-                    throw new SecureException("Node doesn't exist");
                 if (parentId != 0 && db.Nodes.Where(el => el.Id == parentId).FirstOrDefault() == null)
                     throw new SecureException("Parent doesn't exist");
 
@@ -113,7 +117,7 @@ namespace CXMDIRECT.DbControllers
                     throw new SecureException("No object in database");
 
                 if (db.Nodes.Where(el => el.ParentId == id).FirstOrDefault() != null)
-                    throw new SecureException("Object have a children, plese delete or edit it first");
+                    throw new SecureException("Object have a children, please delete or edit it first");
                 
                 db.ChangeTracker.Clear();
                 db.Nodes.Remove(new NodeDbModel()

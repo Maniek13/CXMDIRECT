@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace CXMDIRECT.DbModels
 {
@@ -6,7 +7,7 @@ namespace CXMDIRECT.DbModels
     {
         [Key]
         public int Id { get; set; }
-        public int? ParentId { get; set; }
+        public int ParentId { get; set; }
         [Required]
         public string? Name { get; set; }
         public string? Description { get; set; }

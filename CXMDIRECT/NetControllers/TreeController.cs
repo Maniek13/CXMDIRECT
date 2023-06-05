@@ -19,10 +19,11 @@ namespace CXMDIRECT.NetControllers
             nodeController = new NodeController(connectionString);
         }
 
+        #region http functions
         [HttpGet("{id}")]
         public Response<dynamic> GetNode(int id)
         {
-            List<(string name, string value)> parameters = new()
+            List<(string name, string? value)> parameters = new()
             {
                 new("id", id.ToString())
             };
@@ -49,9 +50,9 @@ namespace CXMDIRECT.NetControllers
         }
 
         [HttpPost()]
-        public Response<dynamic> AddNode(int parrentId, string name, string description = "")
+        public Response<dynamic> AddNode(int? parrentId, string name, string? description)
         {
-            List<(string name, string value)> parameters = new()
+            List<(string name, string? value)> parameters = new()
             {
                 new("parrentId", parrentId.ToString()),
                 new("name", name),
@@ -89,9 +90,10 @@ namespace CXMDIRECT.NetControllers
         }
 
         [HttpPost()]
-        public Response<dynamic> EditNode(int id, int parrentId, string name, string description = "")
+        public Response<dynamic> EditNode(int id, int parrentId, string name, string? description)
         {
-            List<(string name, string value)> parameters = new()
+
+            List<(string name, string? value)> parameters = new()
             {
                 new("id", id.ToString()),
                 new("parrentId", parrentId.ToString()),
@@ -114,7 +116,6 @@ namespace CXMDIRECT.NetControllers
                     Id = 1,
                     Data = node
                 };
-
             }
             catch (SecureException s)
             {
@@ -130,7 +131,7 @@ namespace CXMDIRECT.NetControllers
         [HttpDelete("{id}")]
         public Response<dynamic> DeleteNode(int id)
         {
-            List<(string name, string value)> parameters = new()
+            List<(string name, string? value)> parameters = new()
             {
                 new("id", id.ToString())
             };
@@ -159,11 +160,13 @@ namespace CXMDIRECT.NetControllers
                 return AddToLogs(e, parameters);
             }
         }
-        private Response<dynamic> AddToLogs(Exception exception, List<(string name, string value)> parameters)
+        #endregion
+
+        #region private functions
+        private Response<dynamic> AddToLogs(Exception exception, List<(string name, string? value)> parameters)
         {
             Task<ExceptionLog> task = Task.Run(async () => await logControllers.Add(exception, parameters));
             ExceptionLog log = task.Result;
-
 
             return new Response<dynamic>()
             {
@@ -175,5 +178,6 @@ namespace CXMDIRECT.NetControllers
                 }
             };
         }
+        #endregion
     }
 }
