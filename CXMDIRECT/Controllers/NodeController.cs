@@ -13,11 +13,11 @@ namespace CXMDIRECT.Controllers
         {
             _dbController = new NodesDbController(dbConnection);
         }
-        internal override Node Get(int id)
+        internal override async Task<Node> Get(int id)
         {
             try
             {
-                return ConvertToNode(_dbController.Get(id));
+                return ConvertToNode(await _dbController.Get(id));
 
             }
             catch (SecureException s)
@@ -47,11 +47,11 @@ namespace CXMDIRECT.Controllers
                 throw new Exception(ex.Message, ex);
             }
         }
-        internal override Node Edit(int id, int parentId, string name, string? description)
+        internal override async Task <Node> Edit(int id, int parentId, string name, string? description)
         {
             try
             {
-                return ConvertToNode(_dbController.Edit(id, parentId, name, description));
+                return ConvertToNode(await _dbController.Edit(id, parentId, name, description));
             }
             catch (SecureException s)
             {
@@ -62,12 +62,13 @@ namespace CXMDIRECT.Controllers
                 throw new Exception(ex.Message, ex);
             }
         }
-        internal override void Delete(int id)
+        internal override async Task<bool> Delete(int id)
         {
             try
             {
-                if (_dbController.Delete(id) == false)
+                if (await _dbController.Delete(id) == false)
                     throw new SecureException("Problem with delete, check is object exist in database");
+                return true;
 
             }
             catch (SecureException s)

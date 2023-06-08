@@ -2,13 +2,13 @@ using CXMDIRECT.Data;
 using CXMDIRECT.DbControllers;
 using CXMDIRECT.DbModels;
 using CXMDIRECT.Models;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using NUnit.Framework.Internal;
 
 namespace Tests
 {
     public class NodeTests
     {
-        public string connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=D:\Mariusz\Programowanie\CXMDIRECT\CXMDIRECT\Tests\TestDb.mdf;Integrated Security = True";
+        public string connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\mani3\Desktop\CXMDIRECT\Tests\TestDb.mdf;Integrated Security=True";
         [SetUp]
         public void Setup()
         {
@@ -16,7 +16,7 @@ namespace Tests
         }
 
         [Test]
-        public void TestDelete()
+        public async Task TestDelete()
         {
             int id;
 
@@ -36,11 +36,17 @@ namespace Tests
             }
 
             NodesDbController nodesDbController = new(connectionString);
-            Assert.That(nodesDbController.Delete(id), Is.True);
-            Assert.Throws<SecureException>(() => nodesDbController.Delete(2));
-            Assert.Throws<SecureException>(() => nodesDbController.Delete(-1));
+            bool res = await nodesDbController.Delete(id);
+            Assert.IsTrue(res);
+            using (CXMDIRECTDbContext db = new(connectionString))
+            {
+                var test = db.Nodes.Where(el => el.Id == id).FirstOrDefault();
+                if(!object.ReferenceEquals(test, null))
+                    Assert.Fail();
+            }
 
-
+            Assert.ThrowsAsync<SecureException>(async () => await nodesDbController.Delete(2));
+            Assert.ThrowsAsync<SecureException>(async () => await nodesDbController.Delete(-1));
 
             using (CXMDIRECTDbContext db = new(connectionString))
             {
@@ -64,7 +70,7 @@ namespace Tests
                 db.SaveChanges();
                 id = parent.Id;
 
-                Assert.Throws<SecureException>(() => nodesDbController.Delete(1));
+                Assert.ThrowsAsync<SecureException>(async () => await nodesDbController.Delete(1));
 
                 db.Remove(child);
                 db.Remove(parent);
@@ -72,7 +78,7 @@ namespace Tests
             }
         }
         [Test]
-        public void TestGet()
+        public async Task TestGet()
         {
             int id;
             NodeDbModel node = new();
@@ -89,18 +95,17 @@ namespace Tests
                 db.Add(node);
                 db.SaveChanges();
                 id = node.Id;
-
-                
             }
             NodesDbController nodesDbController = new(connectionString);
+            NodeDbModel getNode = await nodesDbController.Get(id);
             Assert.Multiple(() =>
             {
-                Assert.That(nodesDbController.Get(id).Id, Is.EqualTo(node.Id));
-                Assert.That(nodesDbController.Get(id).ParentId, Is.EqualTo(node.ParentId));
+                Assert.That(getNode.Id, Is.EqualTo(node.Id));
+                Assert.That(getNode.ParentId, Is.EqualTo(node.ParentId));
             });
-            Assert.Throws<SecureException>(() => nodesDbController.Get(id+1));
+            Assert.ThrowsAsync<SecureException>(async () =>await  nodesDbController.Get(id+1));
 
-            nodesDbController.Delete(id);
+            await nodesDbController.Delete(id);
         }
 
         [Test]
@@ -109,45 +114,60 @@ namespace Tests
             NodesDbController nodesDbController = new(connectionString);
 
             NodeDbModel model = await nodesDbController.Add(0,"nowe", "xxx");
-
-            Assert.That(model.Name == "nowe" && model.Description == "xxx");
-
+            using (CXMDIRECTDbContext db = new(connectionString))
+            {
+                var test = db.Nodes.Where(el => el.Id == model.Id).FirstOrDefault();
+                Assert.That(model.Name == test.Name && model.Description == test.Description);
+            }
             Assert.ThrowsAsync<SecureException>(async () => await nodesDbController.Add(-1, "nowe", "xxx"));
             Assert.ThrowsAsync<SecureException>(async () => await nodesDbController.Add(model.Id+100, "nowe", "xxx"));
             Assert.ThrowsAsync<SecureException>(async () => await nodesDbController.Add(model.Id + 100, "nowe", "xxx"));
-            nodesDbController.Delete(model.Id);
+            await nodesDbController.Delete(model.Id);
 
             model = await nodesDbController.Add(0, "nowe", null);
-            Assert.That(model.Name == "nowe" && model.Description == null);
-            nodesDbController.Delete(model.Id);
+            using (CXMDIRECTDbContext db = new(connectionString))
+            {
+                var test = db.Nodes.Where(el => el.Id == model.Id).FirstOrDefault();
+                Assert.That(model.Name == test.Name && model.Description == test.Description);
+            }
+            await nodesDbController.Delete(model.Id);
 
             model = await nodesDbController.Add(null, "nowe", null);
-            Assert.That(model.Name == "nowe" && model.Description == null && model.ParentId == 0);
-            nodesDbController.Delete(model.Id);
+            using (CXMDIRECTDbContext db = new(connectionString))
+            {
+                var test = db.Nodes.Where(el => el.Id == model.Id).FirstOrDefault();
+                Assert.That(model.Name == test.Name && model.Description == test.Description && model.ParentId == test.ParentId);
+            }
+            await nodesDbController.Delete(model.Id);
         }
 
         [Test]
         public async Task TestUpdate()
         {
             NodesDbController nodesDbController = new(connectionString);
-
             NodeDbModel model = await nodesDbController.Add(0, "nowe", "xxx");
 
-            NodeDbModel edited = nodesDbController.Edit(model.Id, 0, "edytowane", "nowy opis");
+            NodeDbModel edited = await nodesDbController.Edit(model.Id, 0, "edytowane", "nowy opis");
+            using (CXMDIRECTDbContext db = new(connectionString))
+            {
+                var test = db.Nodes.Where(el => el.Id == edited.Id).FirstOrDefault();
+                Assert.That(edited.Name == test.Name && edited.Description == test.Description);
+            }
 
-            Assert.That(edited.Name == "edytowane" && edited.Description == "nowy opis");
+            edited = await nodesDbController.Edit(model.Id, 0, "edytowane", null);
+            using (CXMDIRECTDbContext db = new(connectionString))
+            {
+                var test = db.Nodes.Where(el => el.Id == edited.Id).FirstOrDefault();
+                Assert.That(edited.Name == test.Name && edited.Description == test.Description);
+            }
 
-            edited = nodesDbController.Edit(model.Id, 0, "edytowane", null);
-            Assert.That(edited.Name == "edytowane" && edited.Description == null);
+            Assert.ThrowsAsync<SecureException>(async () => await nodesDbController.Edit(-1, 0, "nowe", "xxx"));
+            Assert.ThrowsAsync<SecureException>(async () => await nodesDbController.Edit(0, 0, "nowe", "xxx"));
+            Assert.ThrowsAsync<SecureException>(async () => await nodesDbController.Edit(edited.Id, -1, "nowe", "xxx"));
+            Assert.ThrowsAsync<SecureException>(async () => await nodesDbController.Edit(12, 1, "nowe", "xxx"));
+            Assert.ThrowsAsync<SecureException>(async () => await nodesDbController.Edit(edited.Id, 5, "nowe", "xxx"));
 
-            Assert.Throws<SecureException>(() => nodesDbController.Edit(-1, 0, "nowe", "xxx"));
-            Assert.Throws<SecureException>(() => nodesDbController.Edit(0, 0, "nowe", "xxx"));
-            Assert.Throws<SecureException>(() => nodesDbController.Edit(edited.Id, -1, "nowe", "xxx"));
-
-            Assert.Throws<SecureException>(() => nodesDbController.Edit(12, 1, "nowe", "xxx"));
-            Assert.Throws<SecureException>(() => nodesDbController.Edit(edited.Id, 5, "nowe", "xxx"));
-
-            nodesDbController.Delete(model.Id);
+            await nodesDbController.Delete(model.Id);
 
         }
     }

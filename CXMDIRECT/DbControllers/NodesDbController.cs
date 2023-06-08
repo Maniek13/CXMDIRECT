@@ -9,7 +9,7 @@ namespace CXMDIRECT.DbControllers
     {
         public NodesDbController(string connectionString) : base(connectionString) { }
 
-        public override NodeDbModel Get(int id)
+        public override async Task<NodeDbModel> Get(int id)
         {
             try
             {
@@ -69,7 +69,7 @@ namespace CXMDIRECT.DbControllers
                 throw new Exception(ex.Message, ex);
             }
         }
-        public override NodeDbModel Edit(int id, int parentId, string name, string? description)
+        public override async Task <NodeDbModel> Edit(int id, int parentId, string name, string? description)
         {
             try
             {
@@ -85,12 +85,12 @@ namespace CXMDIRECT.DbControllers
                 if (parentId != 0 && db.Nodes.Where(el => el.Id == parentId).FirstOrDefault() == null)
                     throw new SecureException("Parent doesn't exist");
 
+       
                 node.ParentId = parentId;
                 node.Name = name;
                 node.Description = description;
 
-                db.Nodes.Update(node);
-                db.SaveChanges();
+                await db.SaveChangesAsync();
 
                 return node;
             }
@@ -104,28 +104,24 @@ namespace CXMDIRECT.DbControllers
             }
 
         }
-        public override bool Delete(int id)
+        public override async Task<bool> Delete(int id)
         {
             try
             {
+                
                 if (id < 0)
                     throw new SecureException("The node id must be greater 0");
 
                 using var db = new CXMDIRECTDbContext(_connectionString);
 
-                if (db.Nodes.Where(el => el.Id == id).FirstOrDefault() == null)
-                    throw new SecureException("No object in database");
-
+                NodeDbModel? node = db.Nodes.Where(el => el.Id == id).FirstOrDefault() ?? throw new SecureException("No object in database");
+                
                 if (db.Nodes.Where(el => el.ParentId == id).FirstOrDefault() != null)
                     throw new SecureException("Object have a children, please delete or edit it first");
-                
-                db.ChangeTracker.Clear();
-                db.Nodes.Remove(new NodeDbModel()
-                {
-                    Id = id,
-                });
 
-                db.SaveChanges();
+                db.Nodes.Remove(node);
+                await db.SaveChangesAsync();
+               
                 return true;
             }
             catch (SecureException s)

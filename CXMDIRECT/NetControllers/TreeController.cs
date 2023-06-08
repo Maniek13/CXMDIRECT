@@ -21,7 +21,7 @@ namespace CXMDIRECT.NetControllers
 
         #region http functions
         [HttpGet("{id}")]
-        public Response<dynamic> GetNode(int id)
+        public async Task<Response<dynamic>> GetNode(int id)
         {
             List<(string name, string? value)> parameters = new()
             {
@@ -30,7 +30,7 @@ namespace CXMDIRECT.NetControllers
 
             try
             {
-                Node node = nodeController.Get(id);
+                Node node = await nodeController.Get(id);
 
                 return new Response<dynamic>()
                 {
@@ -41,16 +41,16 @@ namespace CXMDIRECT.NetControllers
             }
             catch (SecureException s)
             {
-                return AddToLogs(s, parameters);
+                return await AddToLogs(s, parameters);
             }
             catch (Exception e)
             {
-                return AddToLogs(e, parameters);
+                return await AddToLogs(e, parameters);
             }
         }
 
         [HttpPost()]
-        public Response<dynamic> AddNode(int? parrentId, string name, string? description)
+        public async Task<Response<dynamic>> AddNode(int? parrentId, string name, string? description)
         {
             List<(string name, string? value)> parameters = new()
             {
@@ -61,9 +61,7 @@ namespace CXMDIRECT.NetControllers
 
             try
             {
-                Task<Node> task = Task.Run(async () => await nodeController.Add(parrentId, name, description));
-
-                Node node = task.Result;
+                Node node = await nodeController.Add(parrentId, name, description);
 
                 return new Response<dynamic>()
                 {
@@ -75,22 +73,22 @@ namespace CXMDIRECT.NetControllers
             catch (AggregateException ae)
             {
                 if (ae.InnerException != null)
-                    return AddToLogs(ae.InnerException, parameters);
+                    return await AddToLogs(ae.InnerException, parameters);
                 else
-                    return AddToLogs(ae, parameters);
+                    return await AddToLogs(ae, parameters);
             }
             catch (SecureException s)
             {
-                return AddToLogs(s, parameters);
+                return await AddToLogs(s, parameters);
             }
             catch (Exception e)
             {
-                return AddToLogs(e, parameters);
+                return await AddToLogs(e, parameters);
             }
         }
 
         [HttpPost()]
-        public Response<dynamic> EditNode(int id, int parrentId, string name, string? description)
+        public async Task<Response<dynamic>> EditNode(int id, int parrentId, string name, string? description)
         {
 
             List<(string name, string? value)> parameters = new()
@@ -108,7 +106,7 @@ namespace CXMDIRECT.NetControllers
                     throw new SecureException("The parent id must be greater or equal 0");
                 }
 
-                Node node = nodeController.Edit(id, parrentId, name, description);
+                Node node = await nodeController.Edit(id, parrentId, name, description);
 
                 return new Response<dynamic>()
                 {
@@ -119,17 +117,17 @@ namespace CXMDIRECT.NetControllers
             }
             catch (SecureException s)
             {
-                return AddToLogs(s, parameters);
+                return await AddToLogs(s, parameters);
             }
             catch (Exception e)
             {
 
-                return AddToLogs(e, parameters);
+                return await AddToLogs(e, parameters);
             }
         }
 
         [HttpDelete("{id}")]
-        public Response<dynamic> DeleteNode(int id)
+        public async Task<Response<dynamic>> DeleteNode(int id)
         {
             List<(string name, string? value)> parameters = new()
             {
@@ -138,7 +136,9 @@ namespace CXMDIRECT.NetControllers
 
             try
             {
-                nodeController.Delete(id);
+                bool res = await nodeController.Delete(id);
+                if (!res)
+                    throw new SecureException("Not was not delete");
 
                 return new Response<dynamic>()
                 {
@@ -151,22 +151,21 @@ namespace CXMDIRECT.NetControllers
             {
 
                 Response.StatusCode = 500;
-                return AddToLogs(s, parameters);
+                return await AddToLogs(s, parameters);
             }
             catch (Exception e)
             {
 
                 Response.StatusCode = 500;
-                return AddToLogs(e, parameters);
+                return await AddToLogs(e, parameters);
             }
         }
         #endregion
 
         #region private functions
-        private Response<dynamic> AddToLogs(Exception exception, List<(string name, string? value)> parameters)
+        private async Task<Response<dynamic>> AddToLogs(Exception exception, List<(string name, string? value)> parameters)
         {
-            Task<ExceptionLog> task = Task.Run(async () => await logControllers.Add(exception, parameters));
-            ExceptionLog log = task.Result;
+            ExceptionLog log = await logControllers.Add(exception, parameters);
 
             return new Response<dynamic>()
             {
