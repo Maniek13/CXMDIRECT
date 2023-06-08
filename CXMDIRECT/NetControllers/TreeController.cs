@@ -149,14 +149,10 @@ namespace CXMDIRECT.NetControllers
             }
             catch (SecureException s)
             {
-
-                Response.StatusCode = 500;
                 return await AddToLogs(s, parameters);
             }
             catch (Exception e)
             {
-
-                Response.StatusCode = 500;
                 return await AddToLogs(e, parameters);
             }
         }
@@ -167,6 +163,7 @@ namespace CXMDIRECT.NetControllers
         {
             ExceptionLog log = await logControllers.Add(exception, parameters);
 
+            Response.StatusCode = 500;
             return new Response<dynamic>()
             {
                 Type = log.ExtensionType,

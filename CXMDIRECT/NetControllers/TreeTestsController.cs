@@ -22,7 +22,7 @@ namespace CXMDIRECT.NetControllers
         }
 
         [HttpPost]
-        public ActionResult GetTest([FromForm]int? id)
+        public async Task<ActionResult> GetTest([FromForm]int? id)
         {
             if(id == null)
             {
@@ -35,13 +35,13 @@ namespace CXMDIRECT.NetControllers
                 });
             }
 
-            var res = treeController.GetNode((int)id);
+            var res = await treeController.GetNode((int)id);
 
             return View("Index", res);
         }
 
         [HttpPost]
-        public ActionResult AddTest([FromForm]int? parrentId, [FromForm]string? name, [FromForm]string? description)
+        public async Task<ActionResult> AddTest([FromForm]int? parrentId, [FromForm]string? name, [FromForm]string? description)
         {
             if (string.IsNullOrEmpty(name))
             {
@@ -54,13 +54,13 @@ namespace CXMDIRECT.NetControllers
                 });
             }
 
-            var res = treeController.AddNode(parrentId, name, description);
+            var res = await treeController.AddNode(parrentId, name, description);
 
             return View("Index", res);
         }
 
         [HttpPost]
-        public ActionResult EditTest([FromForm]int? id, [FromForm]int? parrentId, [FromForm]string? name, [FromForm]string? description)
+        public async Task<ActionResult> EditTest([FromForm]int? id, [FromForm]int? parrentId, [FromForm]string? name, [FromForm]string? description)
         {
             if (id == null)
             {
@@ -93,13 +93,13 @@ namespace CXMDIRECT.NetControllers
                 });
             }
 
-            var res = treeController.EditNode((int)id, (int)parrentId, name, description);
+            var res = await treeController.EditNode((int)id, (int)parrentId, name, description);
 
             return View("Index", res);
         }
 
         [HttpPost]
-        public ActionResult DeleteTest([FromForm]int? id)
+        public async Task<ActionResult> DeleteTest([FromForm]int? id)
         {
             if (id == null)
             {
@@ -112,7 +112,7 @@ namespace CXMDIRECT.NetControllers
                 });
             }
 
-            var res = treeController.DeleteNode((int)id);
+            var res = await treeController.DeleteNode((int)id);
 
             return View("Index", res);
         }
