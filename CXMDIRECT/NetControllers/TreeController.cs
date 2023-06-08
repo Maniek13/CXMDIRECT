@@ -21,7 +21,7 @@ namespace CXMDIRECT.NetControllers
 
         #region http functions
         [HttpGet("{id}")]
-        public async Task<Response<dynamic>> GetNode(int id)
+        public async Task<ObjectResult> GetNode(int id)
         {
             List<(string name, string? value)> parameters = new()
             {
@@ -32,12 +32,12 @@ namespace CXMDIRECT.NetControllers
             {
                 Node node = await nodeController.Get(id);
 
-                return new Response<dynamic>()
+                return StatusCode(200, new Response<dynamic>()
                 {
                     Type = "GetNode",
                     Id = 1,
                     Data = node
-                };
+                });
             }
             catch (SecureException s)
             {
@@ -50,7 +50,7 @@ namespace CXMDIRECT.NetControllers
         }
 
         [HttpPost()]
-        public async Task<Response<dynamic>> AddNode(int? parrentId, string name, string? description)
+        public async Task<ObjectResult> AddNode(int? parrentId, string name, string? description)
         {
             List<(string name, string? value)> parameters = new()
             {
@@ -63,12 +63,12 @@ namespace CXMDIRECT.NetControllers
             {
                 Node node = await nodeController.Add(parrentId, name, description);
 
-                return new Response<dynamic>()
+                return StatusCode(200, new Response<dynamic>()
                 {
                     Type = "AddNode",
                     Id = 1,
                     Data = node
-                };
+                });
             }
             catch (AggregateException ae)
             {
@@ -88,7 +88,7 @@ namespace CXMDIRECT.NetControllers
         }
 
         [HttpPost()]
-        public async Task<Response<dynamic>> EditNode(int id, int parrentId, string name, string? description)
+        public async Task<ObjectResult> EditNode(int id, int parrentId, string name, string? description)
         {
 
             List<(string name, string? value)> parameters = new()
@@ -108,12 +108,12 @@ namespace CXMDIRECT.NetControllers
 
                 Node node = await nodeController.Edit(id, parrentId, name, description);
 
-                return new Response<dynamic>()
+                return StatusCode(200, new Response<dynamic>()
                 {
                     Type = "EditNode",
                     Id = 1,
                     Data = node
-                };
+                });
             }
             catch (SecureException s)
             {
@@ -127,7 +127,7 @@ namespace CXMDIRECT.NetControllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<Response<dynamic>> DeleteNode(int id)
+        public async Task<ObjectResult> DeleteNode(int id)
         {
             List<(string name, string? value)> parameters = new()
             {
@@ -140,12 +140,12 @@ namespace CXMDIRECT.NetControllers
                 if (!res)
                     throw new SecureException("Not was not delete");
 
-                return new Response<dynamic>()
+                return StatusCode(200, new Response<dynamic>()
                 {
                     Type = "DeleteNode",
                     Id = 1,
                     Data = true
-                };
+                });
             }
             catch (SecureException s)
             {
@@ -159,12 +159,11 @@ namespace CXMDIRECT.NetControllers
         #endregion
 
         #region private functions
-        private async Task<Response<dynamic>> AddToLogs(Exception exception, List<(string name, string? value)> parameters)
+        private async Task<ObjectResult> AddToLogs(Exception exception, List<(string name, string? value)> parameters)
         {
             ExceptionLog log = await logControllers.Add(exception, parameters);
 
-            Response.StatusCode = 500;
-            return new Response<dynamic>()
+            return StatusCode(500, new Response<dynamic>()
             {
                 Type = log.ExtensionType,
                 Id = log.Id,
@@ -172,7 +171,7 @@ namespace CXMDIRECT.NetControllers
                 {
                     Message = log.Message
                 }
-            };
+            });
         }
         #endregion
     }

@@ -24,6 +24,7 @@ namespace CXMDIRECT.NetControllers
         [HttpPost]
         public async Task<ActionResult> GetTest([FromForm]int? id)
         {
+
             if(id == null)
             {
                 return View("index", new Response<dynamic>()
@@ -37,7 +38,7 @@ namespace CXMDIRECT.NetControllers
 
             var res = await treeController.GetNode((int)id);
 
-            return View("Index", res);
+            return View("Index", res.Value);
         }
 
         [HttpPost]
@@ -56,7 +57,7 @@ namespace CXMDIRECT.NetControllers
 
             var res = await treeController.AddNode(parrentId, name, description);
 
-            return View("Index", res);
+            return View("Index", res.Value);
         }
 
         [HttpPost]
@@ -95,7 +96,7 @@ namespace CXMDIRECT.NetControllers
 
             var res = await treeController.EditNode((int)id, (int)parrentId, name, description);
 
-            return View("Index", res);
+            return View("Index", res.Value);
         }
 
         [HttpPost]
@@ -114,7 +115,7 @@ namespace CXMDIRECT.NetControllers
 
             var res = await treeController.DeleteNode((int)id);
 
-            return View("Index", res);
+            return View("Index", res.Value);
         }
     }
 }
