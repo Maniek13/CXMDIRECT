@@ -138,7 +138,7 @@ namespace CXMDIRECT.NetControllers
             {
                 bool res = await nodeController.Delete(id);
                 if (!res)
-                    throw new SecureException("Not was not delete");
+                    throw new SecureException("Node was not deleted");
 
                 return StatusCode(200, new Response<dynamic>()
                 {
