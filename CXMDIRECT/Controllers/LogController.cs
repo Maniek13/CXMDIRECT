@@ -1,6 +1,5 @@
 ﻿using CXMDIRECT.AbstractClasses;
 using CXMDIRECT.DbControllers;
-using CXMDIRECT.DbModels;
 
 namespace CXMDIRECT.Controllers
 {
