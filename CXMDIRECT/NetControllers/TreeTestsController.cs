@@ -27,13 +27,7 @@ namespace CXMDIRECT.NetControllers
 
             if(id == null)
             {
-                return View("index", new Response<dynamic>()
-                {
-                    Data = new Error()
-                    {
-                        Message = "Please set id"
-                    }
-                });
+                return View("index", new Response<dynamic>("GetTest", -1, new Error("Please set id")));
             }
 
             var res = await treeController.GetNode((int)id);
@@ -46,13 +40,7 @@ namespace CXMDIRECT.NetControllers
         {
             if (string.IsNullOrEmpty(name))
             {
-                return View("index", new Response<dynamic>()
-                {
-                    Data = new Error()
-                    {
-                        Message = "Please set name"
-                    }
-                });
+                return View("index", new Response<dynamic>("AddTest", -1, new Error("Please set name")));
             }
 
             var res = await treeController.AddNode(parrentId, name, description);
@@ -65,33 +53,15 @@ namespace CXMDIRECT.NetControllers
         {
             if (id == null)
             {
-                return View("index", new Response<dynamic>()
-                {
-                    Data = new Error()
-                    {
-                        Message = "Please set id"
-                    }
-                });
+                return View("index", new Response<dynamic>("EditTest", -1, new Error("Please set id")));
             }
             if (parrentId == null)
             {
-                return View("index", new Response<dynamic>()
-                {
-                    Data = new Error()
-                    {
-                        Message = "Please set parrent id"
-                    }
-                });
+                return View("index", new Response<dynamic>("EditTest", -1, new Error("Please set parrent id")));
             }
             if (string.IsNullOrEmpty(name))
             {
-                return View("index", new Response<dynamic>()
-                {
-                    Data = new Error()
-                    {
-                        Message = "Please set name"
-                    }
-                });
+                return View("index", new Response<dynamic>("EditTest", -1, new Error("Please set name")));
             }
 
             var res = await treeController.EditNode((int)id, (int)parrentId, name, description);
@@ -104,13 +74,7 @@ namespace CXMDIRECT.NetControllers
         {
             if (id == null)
             {
-                return View("index", new Response<dynamic>()
-                {
-                    Data = new Error()
-                    {
-                        Message = "Please set id"
-                    }
-                });
+                return View("index", new Response<dynamic>("DeleteTest", -1, new Error("Please set id")));
             }
 
             var res = await treeController.DeleteNode((int)id);

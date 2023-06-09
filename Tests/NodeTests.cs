@@ -37,11 +37,11 @@ namespace Tests
 
             NodesDbController nodesDbController = new(connectionString);
             bool res = await nodesDbController.Delete(id);
-            Assert.IsTrue(res);
+            Assert.That(res, Is.True);
             using (CXMDIRECTDbContext db = new(connectionString))
             {
                 var test = db.Nodes.Where(el => el.Id == id).FirstOrDefault();
-                if(!object.ReferenceEquals(test, null))
+                if (test is not null)
                     Assert.Fail();
             }
 

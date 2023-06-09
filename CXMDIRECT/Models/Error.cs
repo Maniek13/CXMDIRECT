@@ -1,7 +1,11 @@
 ﻿namespace CXMDIRECT.Models
 {
-    public class Error
+    internal readonly struct Error
     {
-        public string Message { get; set; } = "";
+        internal Error(string message) 
+        {
+            Message = message;
+        }
+        internal string Message { get; }
     }
 }

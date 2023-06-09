@@ -1,10 +1,17 @@
 ﻿namespace CXMDIRECT.Models
 {
-    public class Node
+    public readonly struct Node
     {
-        public int Id { get; set; }
-        public int ParentId { get; set; }
-        public string? Name { get; set; }
-        public string? Description { get; set; }
+        public Node(int id, int parentId, string? name, string? description)
+        {
+            Id = id;
+            ParentId = parentId;
+            Name = name;
+            Description = description;
+        }
+        public int Id { get; }
+        public int ParentId { get; }
+        public string? Name { get; }
+        public string? Description { get; }
     }
 }

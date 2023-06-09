@@ -83,13 +83,7 @@ namespace CXMDIRECT.Controllers
         #region private functions
         private static Node ConvertToNode(NodeDbModel node)
         {
-            return new Node()
-            {
-                Id = node.Id,
-                ParentId = node.ParentId,
-                Name = node.Name,
-                Description = node.Description
-            };
+            return new Node(node.Id, node.ParentId, node.Name, node.Description);
         }
         #endregion
     }

@@ -2,11 +2,16 @@
 
 namespace CXMDIRECT.Models
 {
-    public class Response<T>
+    public record Response<T>
     {
-        public string? Type { get; set; }
-        public long Id { get; set; }
-        public T? Data { get; set; }
-
+        public Response(string? type, long id, T? data)
+        {
+            Type = type;
+            Id = id;
+            Data = data;
+        }
+        public string? Type { get; }
+        public long Id { get; }
+        public T? Data { get; }
     }
 }

@@ -1,7 +1,11 @@
 ﻿namespace CXMDIRECT.Models
 {
-    public class ExceptionData
+    public readonly struct ExceptionData
     {
-        public string Message { get; set; } = "";
+        public ExceptionData(string message)
+        {
+            Message = message;
+        }    
+        public string Message { get; }
     }
 }

@@ -32,12 +32,7 @@ namespace CXMDIRECT.NetControllers
             {
                 Node node = await nodeController.Get(id);
 
-                return StatusCode(200, new Response<dynamic>()
-                {
-                    Type = "GetNode",
-                    Id = 1,
-                    Data = node
-                });
+                return StatusCode(200, new Response<dynamic>("GetNode", 1, node));
             }
             catch (SecureException s)
             {
@@ -63,12 +58,7 @@ namespace CXMDIRECT.NetControllers
             {
                 Node node = await nodeController.Add(parrentId, name, description);
 
-                return StatusCode(200, new Response<dynamic>()
-                {
-                    Type = "AddNode",
-                    Id = 1,
-                    Data = node
-                });
+                return StatusCode(200, new Response<dynamic>("AddNode", 1, node));
             }
             catch (AggregateException ae)
             {
@@ -108,12 +98,7 @@ namespace CXMDIRECT.NetControllers
 
                 Node node = await nodeController.Edit(id, parrentId, name, description);
 
-                return StatusCode(200, new Response<dynamic>()
-                {
-                    Type = "EditNode",
-                    Id = 1,
-                    Data = node
-                });
+                return StatusCode(200, new Response<dynamic>("EditNode", 1, node));
             }
             catch (SecureException s)
             {
@@ -140,12 +125,7 @@ namespace CXMDIRECT.NetControllers
                 if (!res)
                     throw new SecureException("Node was not deleted");
 
-                return StatusCode(200, new Response<dynamic>()
-                {
-                    Type = "DeleteNode",
-                    Id = 1,
-                    Data = true
-                });
+                return StatusCode(200, new Response<dynamic>("DeleteNode", 1, true));
             }
             catch (SecureException s)
             {
@@ -163,15 +143,7 @@ namespace CXMDIRECT.NetControllers
         {
             ExceptionLog log = await logControllers.Add(exception, parameters);
 
-            return StatusCode(500, new Response<dynamic>()
-            {
-                Type = log.ExtensionType,
-                Id = log.Id,
-                Data = new ExceptionData()
-                {
-                    Message = log.Message
-                }
-            });
+            return StatusCode(500, new Response<dynamic>(log.ExtensionType, log.Id, new ExceptionData(log.Message)));
         }
         #endregion
     }

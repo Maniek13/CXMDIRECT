@@ -37,15 +37,13 @@ namespace CXMDIRECT.Controllers
         #region private functions
         private static ExceptionLog ConvertToExceptionLog(ExceptionLogDbModel model)
         {
-            return new ExceptionLog
-            {
-                Id = model.Id,
-                ExtensionType = model.ExtensionType ??= "",
-                InstanceDate = model.InstanceDate,
-                Parameters = model.Parameters,
-                Message = model.ExtensionType == typeof(SecureException).Name ? model.Message : $"{model.Message} ID = {model.Id}",
-                StackTrace = model.StackTrace
-            };
+            return new ExceptionLog(
+                model.Id, 
+                model.ExtensionType ??= "", 
+                model.InstanceDate,
+                model.Parameters ??= "", 
+                model.ExtensionType == typeof(SecureException).Name ? model.Message : $"{model.Message} ID = {model.Id}", 
+                model.StackTrace);
         }
         #endregion
     }
