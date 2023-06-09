@@ -1,3 +1,5 @@
+global using CXMDIRECT.Models;
+
 using CXMDIRECT.Data;
 using Microsoft.EntityFrameworkCore;
 

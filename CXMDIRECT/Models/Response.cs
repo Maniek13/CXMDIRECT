@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-namespace CXMDIRECT.Models
+﻿namespace CXMDIRECT.Models
 {
     public record Response<T>
     {

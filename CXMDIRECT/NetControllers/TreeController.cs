@@ -1,8 +1,6 @@
 using CXMDIRECT.AbstractClasses;
 using CXMDIRECT.Controllers;
-using CXMDIRECT.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace CXMDIRECT.NetControllers
 {

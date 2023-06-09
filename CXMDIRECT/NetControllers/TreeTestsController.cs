@@ -1,4 +1,3 @@
-using CXMDIRECT.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CXMDIRECT.NetControllers

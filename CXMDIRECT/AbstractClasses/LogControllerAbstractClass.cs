@@ -1,6 +1,4 @@
-﻿using CXMDIRECT.Models;
-
-namespace CXMDIRECT.AbstractClasses
+﻿namespace CXMDIRECT.AbstractClasses
 {
     internal abstract class LogControllerAbstractClass
     {
