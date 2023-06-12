@@ -9,16 +9,14 @@ namespace CXMDIRECT.NetControllers
     [Route("[controller]/[action]")]
     public class TreeTestsController : Controller
     {
-
         readonly TreeController treeController;
-
         private readonly IMemoryCache _memoryCache;
 
   
-        public TreeTestsController(IMemoryCache cacheProvider)
+        public TreeTestsController(IMemoryCache memoryCache)
         {
-            _memoryCache = cacheProvider;
-            treeController = new TreeController(cacheProvider);
+            _memoryCache = memoryCache;
+            treeController = new TreeController(memoryCache);
         }
 
         public IActionResult Index()

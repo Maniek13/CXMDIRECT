@@ -44,6 +44,7 @@ namespace CXMDIRECT.NetControllers
                         SlidingExpiration = TimeSpan.FromMinutes(2),
                         Size = 1024,
                     };
+
                     _memoryCache.Set(CacheKeys.GetNodes+id.ToString(), result, cacheEntryOptions);
                 }
 
