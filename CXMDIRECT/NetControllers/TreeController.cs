@@ -9,10 +9,12 @@ namespace CXMDIRECT.NetControllers
     [Route("[controller]/[action]")]
     public class TreeController : Controller
     {
+        #region private members
         private readonly LogControllerAbstractClass logControllers;
         private readonly NodeControllerAbstractClass nodeController;
         private readonly string connectionString = "CXMDIRECTConnection";
         private readonly IMemoryCache _memoryCache;
+        #endregion
 
         public TreeController(IMemoryCache memoryCache)
         {
@@ -32,7 +34,7 @@ namespace CXMDIRECT.NetControllers
 
             try
             {
-                if (!_memoryCache.TryGetValue(CacheKeys.GetNodes + id, out ObjectResult result))
+                if (!_memoryCache.TryGetValue(id, out ObjectResult result))
                 {
                     Node node = await nodeController.Get(id);
 
@@ -45,7 +47,7 @@ namespace CXMDIRECT.NetControllers
                         Size = 1024,
                     };
 
-                    _memoryCache.Set(CacheKeys.GetNodes+id.ToString(), result, cacheEntryOptions);
+                    _memoryCache.Set(id, result, cacheEntryOptions);
                 }
 
                 return result;

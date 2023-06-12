@@ -1,7 +1,7 @@
 ﻿namespace CXMDIRECT.Models
 {
-    public static class CacheKeys
+    public class CacheKeys
     {
-        public static string GetNodes => "_GetNodes";
+        public string GetNode(int id) => "GetNode" + id;
     }
 }

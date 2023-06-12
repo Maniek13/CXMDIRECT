@@ -1,4 +1,3 @@
-using CXMDIRECT.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 
@@ -9,10 +8,11 @@ namespace CXMDIRECT.NetControllers
     [Route("[controller]/[action]")]
     public class TreeTestsController : Controller
     {
-        readonly TreeController treeController;
+        #region private members
+        private readonly TreeController treeController;
         private readonly IMemoryCache _memoryCache;
+        #endregion
 
-  
         public TreeTestsController(IMemoryCache memoryCache)
         {
             _memoryCache = memoryCache;
@@ -27,7 +27,6 @@ namespace CXMDIRECT.NetControllers
         [HttpPost]
         public async Task<ActionResult> GetTest([FromForm]int? id)
         {
-
             if(id == null)
             {
                 return View("index", new Response<dynamic>("GetTest", -1, new Error("Please set id")));
