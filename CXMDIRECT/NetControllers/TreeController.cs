@@ -48,7 +48,7 @@ namespace CXMDIRECT.NetControllers
                     _memoryCache.Set(CacheKeys.GetNodes+id.ToString(), result, cacheEntryOptions);
                 }
 
-                return (ObjectResult)result;
+                return result;
             }
             catch (SecureException s)
             {
