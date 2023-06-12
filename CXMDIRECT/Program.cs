@@ -18,6 +18,7 @@ namespace CXMDIRECT
             builder.Services.AddSwaggerGen();
             builder.Services.AddMvc();
             builder.Services.AddMvcCore();
+            builder.Services.AddMemoryCache();
 
             builder.Services.AddDbContext<CXMDIRECTDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("CXMDIRECTConnection")));

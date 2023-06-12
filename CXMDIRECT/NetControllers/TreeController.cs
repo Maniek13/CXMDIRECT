@@ -1,6 +1,7 @@
 using CXMDIRECT.AbstractClasses;
 using CXMDIRECT.Controllers;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace CXMDIRECT.NetControllers
 {
@@ -11,10 +12,13 @@ namespace CXMDIRECT.NetControllers
         private readonly LogControllerAbstractClass logControllers;
         private readonly NodeControllerAbstractClass nodeController;
         private readonly string connectionString = "CXMDIRECTConnection";
-        public TreeController()
+        private readonly IMemoryCache _memoryCache;
+
+        public TreeController(IMemoryCache memoryCache)
         {
             logControllers = new LogController(connectionString);
             nodeController = new NodeController(connectionString);
+            _memoryCache = memoryCache;
         }
 
         #region http functions
@@ -28,9 +32,22 @@ namespace CXMDIRECT.NetControllers
 
             try
             {
-                Node node = await nodeController.Get(id);
+                if (!_memoryCache.TryGetValue(CacheKeys.GetNodes + id, out ObjectResult result))
+                {
+                    Node node = await nodeController.Get(id);
 
-                return StatusCode(200, new Response<dynamic>("GetNode", 1, node));
+                    result = StatusCode(200, new Response<dynamic>("GetNode", 1, node));
+
+                    var cacheEntryOptions = new MemoryCacheEntryOptions
+                    {
+                        AbsoluteExpiration = DateTime.Now.AddMinutes(5),
+                        SlidingExpiration = TimeSpan.FromMinutes(2),
+                        Size = 1024,
+                    };
+                    _memoryCache.Set(CacheKeys.GetNodes+id.ToString(), result, cacheEntryOptions);
+                }
+
+                return (ObjectResult)result;
             }
             catch (SecureException s)
             {

@@ -1,4 +1,6 @@
+using CXMDIRECT.Controllers;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace CXMDIRECT.NetControllers
 {
@@ -10,9 +12,13 @@ namespace CXMDIRECT.NetControllers
 
         readonly TreeController treeController;
 
-        public TreeTestsController()
+        private readonly IMemoryCache _memoryCache;
+
+  
+        public TreeTestsController(IMemoryCache cacheProvider)
         {
-            treeController = new TreeController();
+            _memoryCache = cacheProvider;
+            treeController = new TreeController(cacheProvider);
         }
 
         public IActionResult Index()
