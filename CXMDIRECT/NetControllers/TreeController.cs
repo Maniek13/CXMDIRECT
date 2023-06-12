@@ -34,7 +34,7 @@ namespace CXMDIRECT.NetControllers
 
             try
             {
-                if (!_memoryCache.TryGetValue(id, out ObjectResult result))
+                if (!_memoryCache.TryGetValue(CacheKeys.GetNode(id), out ObjectResult result))
                 {
                     Node node = await nodeController.Get(id);
 
@@ -47,7 +47,7 @@ namespace CXMDIRECT.NetControllers
                         Size = 1024,
                     };
 
-                    _memoryCache.Set(id, result, cacheEntryOptions);
+                    _memoryCache.Set(CacheKeys.GetNode(id), result, cacheEntryOptions);
                 }
 
                 return result;
