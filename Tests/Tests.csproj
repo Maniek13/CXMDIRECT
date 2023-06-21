@@ -21,4 +21,10 @@
     <ProjectReference Include="..\CXMDIRECT\CXMDIRECT.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="TestDatabase.mdf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

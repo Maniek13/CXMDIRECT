@@ -2,7 +2,9 @@ global using CXMDIRECT.Models;
 global using CXMDIRECT.DbModels;
 using CXMDIRECT.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Runtime.CompilerServices;
 
+[assembly: InternalsVisibleTo("Tests")]
 namespace CXMDIRECT
 {
     public class Program

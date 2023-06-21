@@ -4,9 +4,9 @@ using CXMDIRECT.DbModels;
 
 namespace Tests
 {
-    public class LogTests
+    public class LogTests 
     {
-        public string connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=D:\Mariusz\Programowanie\CXMDIRECT\CXMDIRECT\Tests\TestDb.mdf;Integrated Security = True";
+        public string connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=G:\Programowanie\CXMDIRECT\Tests\TestDatabase.mdf;Integrated Security=True";
         [SetUp]
         public void Setup()
         {
@@ -17,7 +17,6 @@ namespace Tests
         public async Task TestAdd()
         {
             LogDbController logDbController = new(connectionString);
-
             ExceptionLogDbModel log =  await logDbController.Add(new ExceptionLogDbModel());
 
             Assert.That(log, Is.Not.Null);

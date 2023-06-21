@@ -5,11 +5,11 @@ using CXMDIRECT.Models;
 
 namespace CXMDIRECT.DbControllers
 {
-    public class NodesDbController : NodeDbControllerAbstractClass
+    internal class NodesDbController : NodeDbControllerAbstractClass
     {
-        public NodesDbController(string connectionString) : base(connectionString) { }
+        internal NodesDbController(string connectionString) : base(connectionString) { }
 
-        public override async Task<NodeDbModel> Get(int id)
+        internal override async Task<NodeDbModel> Get(int id)
         {
             try
             {
@@ -31,7 +31,7 @@ namespace CXMDIRECT.DbControllers
                 throw new Exception(ex.Message, ex);
             }
         }
-        public override async Task<NodeDbModel> Add(int? parentId, string name, string? description)
+        internal override async Task<NodeDbModel> Add(int? parentId, string name, string? description)
         {
             try
             {
@@ -69,7 +69,7 @@ namespace CXMDIRECT.DbControllers
                 throw new Exception(ex.Message, ex);
             }
         }
-        public override async Task <NodeDbModel> Edit(int id, int parentId, string name, string? description)
+        internal override async Task <NodeDbModel> Edit(int id, int parentId, string name, string? description)
         {
             try
             {
@@ -104,7 +104,7 @@ namespace CXMDIRECT.DbControllers
             }
 
         }
-        public override async Task<bool> Delete(int id)
+        internal override async Task<bool> Delete(int id)
         {
             try
             {

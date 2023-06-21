@@ -42,8 +42,8 @@ namespace CXMDIRECT.NetControllers
 
                     var cacheEntryOptions = new MemoryCacheEntryOptions
                     {
-                        AbsoluteExpiration = DateTime.Now.AddMinutes(5),
-                        SlidingExpiration = TimeSpan.FromMinutes(2),
+                        AbsoluteExpiration = DateTime.Now.AddMinutes(2),
+                        SlidingExpiration = TimeSpan.FromMinutes(1),
                         Size = 1024,
                     };
 

@@ -1,20 +1,16 @@
 ﻿using CXMDIRECT.AbstractClasses;
 using CXMDIRECT.Data;
-using CXMDIRECT.DbModels;
-using Microsoft.EntityFrameworkCore;
 
 namespace CXMDIRECT.DbControllers
 {
-    public class LogDbController : LogDbControllerAbstractClass
+    internal class LogDbController : LogDbControllerAbstractClass
     {
-        public LogDbController(string connectionString) : base(connectionString) { }
-        public override async Task<ExceptionLogDbModel> Add(ExceptionLogDbModel exception)
+        internal LogDbController(string connectionString) : base(connectionString) { }
+        internal override async Task<ExceptionLogDbModel> Add(ExceptionLogDbModel exception)
         {
             try
             {
                 using var db = new CXMDIRECTDbContext(_connectionString);
-
-                DbContextOptionsBuilder dbOptionsBuilder = new();
 
                 await db.ExceptionsLogs.AddAsync(exception);
                 await db.SaveChangesAsync();

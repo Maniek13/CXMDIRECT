@@ -1,18 +1,17 @@
-﻿using CXMDIRECT.DbModels;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace CXMDIRECT.Data
 {
-    public class CXMDIRECTDbContext : DbContext
+    internal class CXMDIRECTDbContext : DbContext
     {
         private readonly string _connectionString;
-        public CXMDIRECTDbContext(string connectionString) 
+        internal CXMDIRECTDbContext(string connectionString) 
         {
             _connectionString = connectionString;
         }
         public CXMDIRECTDbContext(DbContextOptions options) : base(options) { }
-        public DbSet<ExceptionLogDbModel> ExceptionsLogs { get; set; }
-        public DbSet<NodeDbModel> Nodes { get; set; }
+        internal DbSet<ExceptionLogDbModel> ExceptionsLogs { get; set; }
+        internal DbSet<NodeDbModel> Nodes { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

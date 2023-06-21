@@ -8,7 +8,7 @@ namespace Tests
 {
     public class NodeTests
     {
-        public string connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\mani3\Desktop\CXMDIRECT\Tests\TestDb.mdf;Integrated Security=True";
+        public string connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=G:\Programowanie\CXMDIRECT\Tests\TestDatabase.mdf;Integrated Security=True";
         [SetUp]
         public void Setup()
         {
@@ -93,7 +93,7 @@ namespace Tests
                 };
 
                 db.Add(node);
-                db.SaveChanges();
+                await db.SaveChangesAsync();
                 id = node.Id;
             }
             NodesDbController nodesDbController = new(connectionString);

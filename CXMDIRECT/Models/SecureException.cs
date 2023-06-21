@@ -1,9 +1,9 @@
 ﻿namespace CXMDIRECT.Models
 {
-    public class SecureException : System.Exception
+    internal class SecureException : Exception
     {
-        public SecureException() { }
-        public SecureException(string message) : base(message) { }
-        public SecureException(string message, Exception inner) : base(message, inner) { }
+        internal SecureException() { }
+        internal SecureException(string message) : base(message) { }
+        internal SecureException(string message, Exception inner) : base(message, inner) { }
     }
 }
